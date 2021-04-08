@@ -42,6 +42,7 @@ class interface:
 		# window
 		win = self.main_window
 		win.setGeometry(100, 100, 1200, 800)
+		win.setFixedSize(1200, 800)
 		win.setWindowTitle("hello_world")
 		win.setWindowIcon(qico("icon.svg"))
 		win.setStyleSheet('''\
@@ -147,6 +148,7 @@ padding-top: 40;''')
 		mai.setStyleSheet('''\
 background-color: rgba(211, 215, 207, 50);
 padding-left: 10;
+padding-right: 10;
 border-radius: 15;''')
 
 		# password field
@@ -157,6 +159,7 @@ border-radius: 15;''')
 		pas.setStyleSheet('''\
 background-color: rgba(211, 215, 207, 50);
 padding-left: 10;
+padding-right: 10;
 border-radius: 15;''')
 
 		# proceed button
