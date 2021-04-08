@@ -27,14 +27,14 @@ class database:
 1 : username found, password not
 2 : username and password found'''
 		cur = self.cursor
-		com = f"select * from user_credentials where email = '{name}'"
+		com = f"select * from user_credentials where username = '{name}'"
 		cur.execute(com)
 		result = cur.fetchone()
 		is_name = is_pass = 0
 		if result != None:
 			is_name = 1
 		if is_name == 1:
-			com = f"select password from user_credentials where email = '{name}'"
+			com = f"select password from user_credentials where username = '{name}'"
 			cur.execute(com)
 			result = cur.fetchone()
 			if result[0] == password:
@@ -63,6 +63,6 @@ class database:
 			password.isspace() or \
 			len(password) < 5:
 			return 1
-		com = f"insert into user_credentials (username, password) values ({name}, {password})"
+		com = f"insert into user_credentials values ({name}, {password})"
 		cur.execute(com)
 		return 2

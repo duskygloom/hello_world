@@ -3,20 +3,22 @@ from PyQt5.QtWidgets import \
 	QFrame         as qfra, \
 	QPushButton    as qpbt, \
 	QLabel         as qlab, \
-	QLineEdit      as qlin
+	QLineEdit      as qlin, \
+	QShortcut      as qsho
 
 from PyQt5.QtCore    import \
 	Qt as qt
 
 from PyQt5.QtGui     import \
-	QIcon          as qico
+	QIcon          as qico, \
+	QKeySequence   as qkes
 
 from database import database
-
 
 # variables
 
 center = qt.AlignCenter
+enter  = qkes("Return")
 
 
 class interface:
@@ -32,11 +34,12 @@ class interface:
 		self.settings_button = qpbt(window)
 		self.accounts_button = qpbt(window)
 		self.name_label      = qlab(window)
-		self.name_field     = qlin(window)
+		self.name_field      = qlin(window)
 		self.password_field  = qlin(window)
 		self.proceed_button  = qpbt(window)
 		self.database        = database()
 		self.auth_label      = qlab(window)
+		self.passfield_enter = qsho(self.password_field)
 
 	def setup_win(self):
 
@@ -45,7 +48,7 @@ class interface:
 		win.setGeometry(100, 100, 1200, 800)
 		win.setFixedSize(1200, 800)
 		win.setWindowTitle("hello_world")
-		win.setWindowIcon(qico("icon.svg"))
+		win.setWindowIcon(qico("resources/icon.svg"))
 		win.setStyleSheet('''\
 background-color: rgb(33, 33, 33);
 color: white;
@@ -181,6 +184,11 @@ border-radius: 25;''')
 color: gray;
 padding-left: 5''')
 		aut.adjustSize()
+
+		# proceed shortcut
+		pen = self.passfield_enter
+		pen.setKey(enter)
+		pen.activated.connect(self.pro_click)
 
 
 	# you button function
