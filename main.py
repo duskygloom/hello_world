@@ -43,7 +43,7 @@ class interface:
 		win = self.main_window
 		win.setGeometry(100, 100, 1200, 800)
 		win.setWindowTitle("hello_world")
-		win.setWindowIcon(qico("icon.png"))
+		win.setWindowIcon(qico("icon.svg"))
 		win.setStyleSheet('''\
 background-color: rgb(33, 33, 33);
 color: white;
