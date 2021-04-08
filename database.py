@@ -21,23 +21,48 @@ class database:
 		self.cursor = self.client.cursor()
 
 
-	def authentication(self, email: str, password: str) -> int:
+	def authentication(self, name: str, password: str) -> int:
 		'''\
-0  : email and password not found
-10 : email found, password not
-11 : email and password found'''
+0 : username and password not found
+1 : username found, password not
+2 : username and password found'''
 		cur = self.cursor
-		com = f"select * from user_credentials where email = '{email}'"
+		com = f"select * from user_credentials where email = '{name}'"
 		cur.execute(com)
 		result = cur.fetchone()
-		is_mail = is_pass = 0
+		is_name = is_pass = 0
 		if result != None:
-			is_mail = 1
-		if is_mail == 1:
-			com = f"select password from user_credentials where email = '{email}'"
+			is_name = 1
+		if is_name == 1:
+			com = f"select password from user_credentials where email = '{name}'"
 			cur.execute(com)
 			result = cur.fetchone()
 			if result[0] == password:
 				is_pass = 1
-		return is_mail * 10 + is_pass
-		
+		value = is_name * 10 + is_pass
+		if value == 0:
+			return 0
+		elif value == 10:
+			return 1
+		elif value == 11:
+			return 2
+
+	def enrollment(self, name: str, password: str) -> int:
+		'''\
+0 : invalid username
+1 : invalid password
+2 : enrolled'''
+		cur = self.cursor
+		if \
+			name == "" or \
+			name.isspace or \
+			len(name) < 5:
+			return 0
+		elif \
+			password == "" or \
+			password.isspace() or \
+			len(password) < 5:
+			return 1
+		com = f"insert into user_credentials (username, password) values ({name}, {password})"
+		cur.execute(com)
+		return 2

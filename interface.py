@@ -32,7 +32,7 @@ class interface:
 		self.settings_button = qpbt(window)
 		self.accounts_button = qpbt(window)
 		self.name_label      = qlab(window)
-		self.email_field     = qlin(window)
+		self.name_field     = qlin(window)
 		self.password_field  = qlin(window)
 		self.proceed_button  = qpbt(window)
 		self.database        = database()
@@ -142,10 +142,10 @@ border-radius: 140;
 font: 100pt;
 padding-top: 40;''')
 
-		# email field
-		mai = self.email_field
+		# name field
+		mai = self.name_field
 		mai.setGeometry(430, 520, 340, 40)
-		mai.setPlaceholderText("email_id")
+		mai.setPlaceholderText("username")
 		mai.setStyleSheet('''\
 background-color: rgba(211, 215, 207, 50);
 padding-left: 10;
@@ -218,16 +218,16 @@ padding-left: 5''')
 	# proceed click function
 	def pro_click(self):
 		aut = self.auth_label
-		email = self.email_field.text()
+		name = self.name_field.text()
 		password = self.password_field.text()
-		value = self.database.authentication(email, password)
+		value = self.database.authentication(name, password)
 		if value == 0:
-			aut.setText("email id is not registered")
+			aut.setText("username is not registered")
 			aut.adjustSize()
-		elif value == 11:
+		elif value == 2:
 			aut.setText("ready to be logged in")
 			aut.adjustSize()
-		elif value == 10:
+		elif value == 1:
 			aut.setText("incorrect password")
 			aut.adjustSize()
 
