@@ -1,10 +1,13 @@
+import pickle
+
 from PyQt5.QtWidgets import \
 	QMainWindow    as qwin, \
 	QFrame         as qfra, \
 	QPushButton    as qpbt, \
 	QLabel         as qlab, \
 	QLineEdit      as qlin, \
-	QShortcut      as qsho
+	QShortcut      as qsho, \
+	QGroupBox      as qgro
 
 from PyQt5.QtCore    import \
 	Qt as qt
@@ -18,7 +21,17 @@ from database import database
 # variables
 
 center = qt.AlignCenter
+top    = qt.AlignTop
+left   = qt.AlignLeft
+hand   = qt.PointingHandCursor
 enter  = qkes("Return")
+escape = qkes("Escape")
+data   = "data/users.bat"
+try:
+	with open(data, "rb") as file:
+		users = pickle.load(file)
+except:
+	users = []
 
 
 class interface:
@@ -26,30 +39,40 @@ class interface:
 	def __init__(self, window: qwin):
 		self.main_window     = window
 		self.top_box         = qfra(window)
-		self.you_button      = qpbt(window)
-		self.cards_button    = qpbt(window)
-		self.people_button   = qpbt(window)
-		self.groups_button   = qpbt(window)
-		self.posts_button    = qpbt(window)
-		self.settings_button = qpbt(window)
-		self.accounts_button = qpbt(window)
-		self.name_label      = qlab(window)
-		self.name_field      = qlin(window)
-		self.password_field  = qlin(window)
-		self.proceed_button  = qpbt(window)
+		self.icon            = qico("resources/icon.svg")
+		self.home_button     = qpbt(window)
+		self.cards_button    = top_button(window)
+		self.people_button   = top_button(window)
+		self.groups_button   = top_button(window)
+		self.posts_button    = top_button(window)
+		self.settings_button = top_button(window)
+		self.accounts_button = top_button(window)
+		self.label_01        = qlab(window)
+		self.label_02        = qlab(window)
+		self.lineedit_01     = qlin(window)
+		self.lineedit_02     = qlin(window)
+		self.button_01       = body_button(window)
 		self.database        = database()
-		self.auth_label      = qlab(window)
-		self.passfield_enter = qsho(self.password_field)
+		self.popupbox_01     = popup(window)
+		self.popupbox_02     = popup(window)
+		self.popupbox_03     = popup(window)
+		self.panel_message   = panel(window)
+		self.panel_updates   = panel(window)
+		self.shortcut_01     = qsho(self.lineedit_02)
+		self.shortcut_02     = qsho(self.popupbox_01)
+		self.shortcut_03     = qsho(self.popupbox_02)
+		self.shortcut_04     = qsho(self.popupbox_01)
+		self.shortcut_05     = qsho(self.popupbox_02)
+		self.shortcut_06     = qsho(self.popupbox_03)
 
-	def setup_win(self):
 
 		# window
-		win = self.main_window
-		win.setGeometry(100, 100, 1200, 800)
-		win.setFixedSize(1200, 800)
-		win.setWindowTitle("hello_world")
-		win.setWindowIcon(qico("resources/icon.svg"))
-		win.setStyleSheet('''\
+		window = self.main_window
+		window.setGeometry(100, 100, 1200, 800)
+		window.setFixedSize(1200, 800)
+		window.setWindowTitle("hello_world")
+		window.setWindowIcon(self.icon)
+		window.setStyleSheet('''\
 background-color: rgb(33, 33, 33);
 color: white;
 font: 20pt "Josefin Sans"''')
@@ -65,78 +88,67 @@ border-style: solid;
 border-width: 3;
 border-color: rgb(255, 100, 125);''')
 
-		# you button
-		you = self.you_button
-		you.setGeometry(10, 10, 130, 60)
-		you.setText("h_w")
-		you.clicked.connect(self.you_click)
-		you.setStyleSheet('''\
+		# home button
+		button = self.home_button
+		button.setGeometry(10, 10, 130, 60)
+		button.setText("home")
+		button.clicked.connect(self.setup_start)
+		button.setStyleSheet('''\
 background-color: rgb(255, 100, 125);
-font-size: 25pt;
+font-size: 20pt;
 font-weight: 700;
 color: black;
 border-radius: 30;''')
 
 		# cards button
-		car = self.cards_button
-		car.setGeometry(160, 20, 140, 40)
-		car.setText("cards")
-		car.clicked.connect(self.car_click)
-		car.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.cards_button
+		button.setGeometry(160, 20, 140, 40)
+		button.setText("cards")
+		button.clicked.connect(self.setup_cards)
 
 		# people button
-		peo = self.people_button
-		peo.setGeometry(320, 20, 140, 40)
-		peo.setText("people")
-		peo.clicked.connect(self.peo_click)
-		peo.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.people_button
+		button.setGeometry(320, 20, 140, 40)
+		button.setText("people")
+		button.clicked.connect(self.setup_people)
 
 		# groups button
-		gro = self.groups_button
-		gro.setGeometry(480, 20, 140, 40)
-		gro.setText("groups")
-		gro.clicked.connect(self.gro_click)
-		gro.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.groups_button
+		button.setGeometry(480, 20, 140, 40)
+		button.setText("groups")
+		button.clicked.connect(self.setup_groups)
 
 		# posts button
-		pos = self.posts_button
-		pos.setGeometry(640, 20, 140, 40)
-		pos.setText("posts")
-		pos.clicked.connect(self.pos_click)
-		pos.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.posts_button
+		button.setGeometry(640, 20, 140, 40)
+		button.setText("posts")
+		button.clicked.connect(self.setup_posts)
 
 		# settings button
-		sett = self.settings_button
-		sett.setGeometry(880, 20, 140, 40)
-		sett.setText("settings")
-		sett.clicked.connect(self.set_click)
-		sett.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.settings_button
+		button.setGeometry(880, 20, 140, 40)
+		button.setText("settings")
+		button.clicked.connect(self.setup_settings)
 
 		# accounts button
-		acc = self.accounts_button
-		acc.setGeometry(1040, 20, 140, 40)
-		acc.setText("accounts")
-		acc.clicked.connect(self.acc_click)
-		acc.setStyleSheet('''\
-border-style: none;
-background-color: rgba(33, 33, 33, 0);''')
+		button = self.accounts_button
+		button.setGeometry(1040, 20, 140, 40)
+		button.setText("accounts")
+		button.clicked.connect(self.accounts_click)
+		
+
+	def setup_start(self):
+
+		# remove unncessary widgets
+		self.panel_message.setVisible(False)
+		self.panel_updates.setVisible(False)
 
 		# name label
-		nam = self.name_label
-		nam.setGeometry(170, 130, 860, 280)
-		nam.setText("hello_world")
-		nam.setAlignment(center)
-		nam.setStyleSheet('''\
+		label = self.label_01
+		label.setGeometry(170, 130, 860, 280)
+		label.setText("hello_world")
+		label.setAlignment(center)
+		label.setStyleSheet('''\
 background-color: rgba(33, 33, 33, 0);
 border-style: solid;
 border-width: 5;
@@ -144,98 +156,327 @@ border-color: rgb(255, 100, 125);
 border-radius: 140;
 font: 100pt;
 padding-top: 40;''')
+		label.setVisible(True)
 
 		# name field
-		mai = self.name_field
-		mai.setGeometry(430, 520, 340, 40)
-		mai.setPlaceholderText("username")
-		mai.setStyleSheet('''\
+		linedit = self.lineedit_01
+		linedit.setGeometry(430, 520, 340, 40)
+		linedit.setPlaceholderText("username")
+		linedit.setStyleSheet('''\
 background-color: rgba(211, 215, 207, 50);
 padding-left: 10;
 padding-right: 10;
 border-radius: 15;''')
+		linedit.setVisible(True)
 
 		# password field
-		pas = self.password_field
-		pas.setGeometry(430, 580, 340, 40)
-		pas.setEchoMode(qlin.Password)
-		pas.setPlaceholderText("password")
-		pas.setStyleSheet('''\
+		linedit = self.lineedit_02
+		linedit.setGeometry(430, 580, 340, 40)
+		linedit.setEchoMode(qlin.Password)
+		linedit.setPlaceholderText("password")
+		linedit.setStyleSheet('''\
 background-color: rgba(211, 215, 207, 50);
 padding-left: 10;
 padding-right: 10;
 border-radius: 15;''')
+		linedit.setVisible(True)
 
 		# proceed button
-		pro = self.proceed_button
-		pro.setGeometry(540, 670, 130, 50)
-		pro.setText("proceed")
-		pro.clicked.connect(self.pro_click)
-		pro.setStyleSheet('''\
-background-color: rgb(255, 100, 125);
-color: black;
-border-radius: 25;''')
+		button = self.button_01
+		button.setGeometry(540, 670, 130, 50)
+		button.setText("proceed")
+		button.clicked.connect(self.proceed_click)
+		button.setVisible(True)
 
-		# auth label
-		aut = self.auth_label
-		aut.setGeometry(0, 770, 130, 50)
-		aut.setText("did not proceed")
-		aut.setStyleSheet('''\
+		# status label
+		label = self.label_02
+		label.setGeometry(0, 770, 130, 50)
+		label.adjustSize()
+		label.setStyleSheet('''\
 color: gray;
 padding-left: 5''')
-		aut.adjustSize()
+		label.setVisible(True)
+
+		# enroll box
+		popbox = self.popupbox_01
+		popbox.yes.clicked.connect(self.enroll_yes)
+		popbox.no.clicked.connect(self.enroll_no)
+
+		# login box
+		popbox = self.popupbox_02
+		popbox.yes.clicked.connect(self.login_yes)
+		popbox.no.clicked.connect(self.login_no)
+
+		# accounts box
+		popbox = self.popupbox_03
+		popbox.setGeometry(570, 100, 600, 400)
+		popbox.no.clicked.connect(self.accounts_close)
 
 		# proceed shortcut
-		pen = self.passfield_enter
-		pen.setKey(enter)
-		pen.activated.connect(self.pro_click)
+		shortcut = self.shortcut_01
+		shortcut.setKey(enter)
+		shortcut.activated.connect(self.proceed_click)
+		shortcut.setEnabled(True)
+
+		# enroll yes shortcut
+		shortcut = self.shortcut_02
+		shortcut.setKey(enter)
+		shortcut.activated.connect(self.enroll_yes)
+		shortcut.setEnabled(False)
+
+		# enroll no shortcut
+		shortcut = self.shortcut_04
+		shortcut.setKey(escape)
+		shortcut.activated.connect(self.enroll_no)
+		shortcut.setEnabled(False)
+
+		# login yes shortcut
+		shortcut = self.shortcut_03
+		shortcut.setKey(enter)
+		shortcut.activated.connect(self.login_yes)
+		shortcut.setEnabled(False)
+
+		# login no shortcut
+		shortcut = self.shortcut_05
+		shortcut.setKey(escape)
+		shortcut.activated.connect(self.login_no)
+		shortcut.setEnabled(False)
+
+		# accounts close shortcut
+		shortcut = self.shortcut_06
+		shortcut.setKey(escape)
+		shortcut.activated.connect(self.accounts_close)
+		shortcut.setEnabled(False)
+
+		# accounts box
+		popbox = self.popupbox_03
+		popbox.yes.setVisible(False)
 
 
-	# you button function
-	def you_click(self):
-		btext = self.you_button.text()
-		if btext == "h_w":
-			self.you_button.setText("you")
-		else:
-			self.you_button.setText("h_w")
+	# home window
+	def setup_home(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
 
-	# cards button function
-	def car_click(self):
-		print("cards")
 
-	# people click function
-	def peo_click(self):
-		print("people")
+	# cards window
+	def setup_cards(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
 
-	# groups click function
-	def gro_click(self):
-		print("groups")
 
-	# posts click function
-	def pos_click(self):
-		print("posts")
+	# people window
+	def setup_people(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
 
-	# settings click function
-	def set_click(self):
-		print("settings")
+
+	# groups window
+	def setup_groups(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
+
+
+	# posts window
+	def setup_posts(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
+
+
+	# settings window
+	def setup_settings(self):
+		self.label_01.setText("unwritten")
+		self.lineedit_01.setVisible(False)
+		self.lineedit_02.setVisible(False)
+		self.button_01.setVisible(False)
+
 
 	# accounts click function
-	def acc_click(self):
-		print("accounts")
+	def accounts_click(self):
+		self.popupbox_03.no.setText("close  ")
+		text = "logged in users: \n\n"
+		for i in users:
+			text += " > " + i + "\n"
+		self.popupbox_03.setText(text)
+		self.popupbox_03.setVisible(True)
+		self.shortcut_06.setEnabled(True)
 
 	# proceed click function
-	def pro_click(self):
-		aut = self.auth_label
-		name = self.name_field.text()
-		password = self.password_field.text()
+	def proceed_click(self):
+		stat = self.label_02
+		name = self.lineedit_01.text()
+		password = self.lineedit_02.text()
 		value = self.database.authentication(name, password)
 		if value == 0:
-			aut.setText("username is not registered")
-			aut.adjustSize()
-		elif value == 2:
-			aut.setText("ready to be logged in")
-			aut.adjustSize()
-		elif value == 1:
-			aut.setText("incorrect password")
-			aut.adjustSize()
+			stat.setText("username is not registered")
+			stat.adjustSize()
+			self.popupbox_01.setText(f'''\
+Confirm enrollment!
 
+
+username: {self.lineedit_01.text()}
+password: {self.lineedit_02.text()}
+
+rules for username and password:
+• username and password must not be empty or whitespace
+• username and password must be longer than 5 characters
+• username and password cannot contain " and \\''')
+			self.popupbox_01.setVisible(True)
+			self.shortcut_01.setEnabled(False)
+			self.shortcut_02.setEnabled(True)
+			self.shortcut_04.setEnabled(True)
+		elif value == 2:
+			stat.setText("logging in...")
+			stat.adjustSize()
+			self.popupbox_02.setText(f'''\
+Confirm login!
+
+
+username: {self.lineedit_01.text()}
+password: {self.lineedit_02.text()}''')
+			self.popupbox_02.setVisible(True)
+			self.shortcut_01.setEnabled(False)
+			self.shortcut_03.setEnabled(True)
+			self.shortcut_05.setEnabled(True)
+		elif value == 1:
+			stat.setText("incorrect password")
+			stat.adjustSize()
+
+	# enroll box yes function
+	def enroll_yes(self):
+		name = self.lineedit_01.text()
+		password = self.lineedit_02.text()
+		signal = self.database.enrollment(name, password)
+		if signal == 0:
+			self.label_02.setText("invalid username")
+			self.popupbox_01.setVisible(False)
+			self.shortcut_01.setEnabled(True)
+			self.shortcut_02.setEnabled(False)
+		elif signal == 1:
+			self.label_02.setText("invalid password")
+			self.popupbox_01.setVisible(False)
+			self.shortcut_01.setEnabled(True)
+			self.shortcut_02.setEnabled(False)
+		elif signal == 2:
+			self.label_02.setText("account created")
+			self.popupbox_01.setVisible(False)
+			self.shortcut_01.setEnabled(True)
+			self.shortcut_02.setEnabled(False)
+
+	# login box yes function
+	def login_yes(self):
+		global users
+		user = self.lineedit_01.text()
+		if user not in users:
+			users.append(self.lineedit_01.text())
+		with open(data, "wb") as user_bin:
+			pickle.dump(users, user_bin)
+		self.popupbox_02.setVisible(False)
+		self.shortcut_01.setEnabled(True)
+		self.shortcut_03.setEnabled(False)
+
+	# enroll box no function
+	def enroll_no(self):
+		self.popupbox_01.setVisible(False)
+		self.shortcut_01.setEnabled(True)
+		self.shortcut_02.setEnabled(False)
+		self.shortcut_04.setEnabled(False)
+
+	# login box no function
+	def login_no(self):
+		self.popupbox_02.setVisible(False)
+		self.shortcut_01.setEnabled(True)
+		self.shortcut_03.setEnabled(False)
+		self.shortcut_05.setEnabled(False)
+
+	# account box close function
+	def accounts_close(self):
+		self.popupbox_03.setVisible(False)
+		self.shortcut_06.setEnabled(False)
+
+
+class body_button(qpbt):
+	
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setCursor(hand)
+		self.setStyleSheet('''\
+QPushButton::hover
+{
+	background-color: rgb(255, 255, 255);
+}
+QPushButton
+{
+	background-color: rgb(255, 100, 125);
+	color: black;
+	border-radius: 25;
+	border-style: none;
+	padding-top: 0;
+	padding-left: 0;
+	padding-right: 0;
+}''')
+
+
+class popup(qlab):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.window = window
+		self.setGeometry(300, 200, 600, 400)
+		self.setWordWrap(True)
+		self.setAlignment(top)
+		self.setStyleSheet('''\
+border-style: solid;
+border-width: 5;
+border-radius: 20;
+border-color: rgb(255, 100, 125);
+background-color: rgba(33, 33, 33, 200);
+padding-top: 10;
+padding-left: 10;
+padding-right: 110;''')
+		# yes button
+		self.yes = body_button(self)
+		self.yes.setGeometry(475, 150, 150, 50)
+		self.yes.setText("yes  ")
+		# no button
+		self.no = body_button(self)
+		self.no.setGeometry(475, 250, 150, 50)
+		self.no.setText("no   ")
+		self.setVisible(False)
+
+
+class top_button(qpbt):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setCursor(hand)
+		self.setStyleSheet('''\
+QPushButton::hover
+{
+	font-weight: 700;
+	color: rgb(255, 100, 125);
+}
+QPushButton
+{
+border-style: none;
+background-color: rgba(33, 33, 33, 0);
+}''')
+
+
+class panel(qgro):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setGeometry(25, 25, 1150, 750)
+		self.setStyleSheet('''\
+background-color: rgba(33, 33, 33, 230);''')

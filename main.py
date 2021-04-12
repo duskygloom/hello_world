@@ -14,7 +14,7 @@ if __name__ == "__main__":
     app = qapp(sys.argv)
     window = qwin()
     ui = interface(window)
-    ui.setup_win()
+    ui.setup_start()
 
     # quit shortcut
     quit_shortcut = qsho(qkes("Ctrl+Q"), window)

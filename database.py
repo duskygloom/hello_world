@@ -53,16 +53,10 @@ class database:
 1 : invalid password
 2 : enrolled'''
 		cur = self.cursor
-		if \
-			name == "" or \
-			name.isspace or \
-			len(name) < 5:
+		if name == "" or name.isspace() or len(name) < 5 or "\"" in name or "\\" in name:
 			return 0
-		elif \
-			password == "" or \
-			password.isspace() or \
-			len(password) < 5:
+		elif password == "" or password.isspace() or len(password) < 5 or "\"" in password or "\\" in password:
 			return 1
-		com = f"insert into user_credentials values ({name}, {password})"
+		com = f'''insert into user_credentials values ("{name}", "{password}")'''
 		cur.execute(com)
 		return 2
