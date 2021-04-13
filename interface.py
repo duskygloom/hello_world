@@ -6,14 +6,15 @@ from PyQt5.QtWidgets import \
 	QPushButton    as qpbt, \
 	QLabel         as qlab, \
 	QLineEdit      as qlin, \
-	QShortcut      as qsho, \
-	QGroupBox      as qgro
+	QShortcut      as qsho
 
 from PyQt5.QtGui     import \
 	QIcon          as qico, \
 	QKeySequence   as qkes
 
-from PyQt5.QtCore import Qt as qt
+from PyQt5.QtCore import \
+	QSize as qsiz, \
+	Qt as qt
 
 from database import database
 
@@ -55,8 +56,8 @@ class interface:
 		self.popupbox_01     = popup(window)
 		self.popupbox_02     = popup(window)
 		self.popupbox_03     = popup(window)
-		self.panel_message   = panel(window)
-		self.panel_updates   = panel(window)
+		self.panel_message   = message_panel(window)
+		self.panel_updates   = updates_panel(window)
 		self.shortcut_01     = qsho(self.lineedit_02)
 		self.shortcut_02     = qsho(self.popupbox_01)
 		self.shortcut_03     = qsho(self.popupbox_02)
@@ -254,61 +255,89 @@ padding-left: 5''')
 
 	# home window
 	def setup_home(self):
-		self.label_01.setText("unwritten")
+		self.label_01.setText("home")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+
+		# updates panel
+		panel = self.panel_updates
+		panel.setVisible(True)
+
+		# messages panel
+		panel = self.panel_message
+		panel.setVisible(True)
 
 
 	# cards window
 	def setup_cards(self):
 
 		# hiding unnecessary widgets
-		self.label_01.setText("unwritten")
+		self.label_01.setText("cards")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
 		
 		# updates panel
 		panel = self.panel_updates
-		panel.setGeometry(25, 700, 1150, 750)
-		panel.label.setText("updates")
 		panel.setVisible(True)
 
 		# messages panel
 		panel = self.panel_message
-		panel.setGeometry(25, 600, 1150, 750)
-		panel.label.setText("messages")
 		panel.setVisible(True)
 
 
 	# people window
 	def setup_people(self):
-		self.label_01.setText("unwritten")
+		self.label_01.setText("people")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+
+		# updates panel
+		panel = self.panel_updates
+		panel.setVisible(True)
+
+		# messages panel
+		panel = self.panel_message
+		panel.setVisible(True)
 
 
 	# groups window
 	def setup_groups(self):
-		self.label_01.setText("unwritten")
+		self.label_01.setText("groups")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+
+		# updates panel
+		panel = self.panel_updates
+		panel.setVisible(True)
+
+		# messages panel
+		panel = self.panel_message
+		panel.setVisible(True)
 
 
 	# posts window
 	def setup_posts(self):
-		self.label_01.setText("unwritten")
+		self.label_01.setText("posts")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
 
+		# updates panel
+		panel = self.panel_updates
+		panel.setVisible(True)
+
+		# messages panel
+		panel = self.panel_message
+		panel.setVisible(True)
+
 
 	# settings window
 	def setup_settings(self):
-		self.label_01.setText("unwritten")
+		self.label_01.setText("settings")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
@@ -486,50 +515,78 @@ background-color: rgba(33, 33, 33, 0);
 }''')
 
 
-class panel(qgro):
+class panel(qfra):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
 		self.setStyleSheet('''\
-background-color: rgba(200, 120, 120, 230);
+background-color: rgba(200, 100, 100, 200);
 border-radius: 20;''')
+
+		# icons
+		self.up   = qico("resources/up.svg")
+		self.down = qico("resources/down.svg")
 
 		# title
 		self.label = qlab(self)
-		self.label.setGeometry(25, 675, 1050, 100)
+		self.label.setGeometry(20, 15, 300, 50)
 		self.label.setStyleSheet('''\
-border-style: solid;
-border-width: 3;
-border-color: rgb(255, 100, 125);
-border-radius: 20;
-font-size: 20;
+border-radius: 0;
+background-color: rgba(0, 0, 0, 0);
+font: 40pt;
 font-weight: 700;''')
 
-		# button up
+		# button
 		self.button = qpbt(self)
-		self.button.setGeometry(5, 370, 2, 5)
-		self.button.setText("up")
+		self.button.setGeometry(1040, 15, 100, 50)
+		self.button.setIcon(self.up)
+		self.button.setIconSize(qsiz(50, 50))
+		self.button.setCursor(hand)
 		self.button.clicked.connect(self.pull_up)
 		self.button.setStyleSheet('''\
 QPushButton::hover
 {
-	color: blue;
+	color: white;
 }
 QPushButton
 {
 	background-color: rgba(0, 0, 0, 0);
-	border-style: none;
 	color: black;
 }''')
 
 	# pull up function
 	def pull_up(self):
-		self.original_geo = self.geometry()
-		self.setGeometry(25, 25, 1150, 750)
-		self.button.setText("down")
+		self.setGeometry(25, 80, 1150, 700)
+		self.button.setIcon(self.down)
+		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_down)
 
+
+class message_panel(panel):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setGeometry(25, 600, 1150, 700)
+		self.label.setText("message")
+
+	# pull down function
 	def pull_down(self):
-		self.setGeometry(self.original_geo)
-		self.button.setText("up")
+		self.setGeometry(25, 600, 1150, 700)
+		self.button.setIcon(self.up)
+		self.button.setIconSize(qsiz(50, 50))
+		self.button.clicked.connect(self.pull_up)
+
+
+class updates_panel(panel):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setGeometry(25, 700, 1150, 750)
+		self.label.setText("updates")
+
+	# pull down function
+	def pull_down(self):
+		self.setGeometry(25, 700, 1150, 750)
+		self.button.setIcon(self.up)
+		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)

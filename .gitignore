@@ -9,5 +9,6 @@ log.txt
 
 # test files
 data
+test.ui
 new.py
 objects.py
