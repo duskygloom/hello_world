@@ -9,12 +9,11 @@ from PyQt5.QtWidgets import \
 	QShortcut      as qsho, \
 	QGroupBox      as qgro
 
-from PyQt5.QtCore    import \
-	Qt as qt
-
 from PyQt5.QtGui     import \
 	QIcon          as qico, \
 	QKeySequence   as qkes
+
+from PyQt5.QtCore import Qt as qt
 
 from database import database
 
@@ -93,10 +92,10 @@ border-color: rgb(255, 100, 125);''')
 		button.setGeometry(10, 10, 130, 60)
 		button.setText("home")
 		button.clicked.connect(self.setup_start)
+		button.setCursor(hand)
 		button.setStyleSheet('''\
 background-color: rgb(255, 100, 125);
 font-size: 20pt;
-font-weight: 700;
 color: black;
 border-radius: 30;''')
 
@@ -263,10 +262,24 @@ padding-left: 5''')
 
 	# cards window
 	def setup_cards(self):
+
+		# hiding unnecessary widgets
 		self.label_01.setText("unwritten")
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		
+		# updates panel
+		panel = self.panel_updates
+		panel.setGeometry(25, 700, 1150, 750)
+		panel.label.setText("updates")
+		panel.setVisible(True)
+
+		# messages panel
+		panel = self.panel_message
+		panel.setGeometry(25, 600, 1150, 750)
+		panel.label.setText("messages")
+		panel.setVisible(True)
 
 
 	# people window
@@ -477,6 +490,46 @@ class panel(qgro):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setGeometry(25, 25, 1150, 750)
 		self.setStyleSheet('''\
-background-color: rgba(33, 33, 33, 230);''')
+background-color: rgba(200, 120, 120, 230);
+border-radius: 20;''')
+
+		# title
+		self.label = qlab(self)
+		self.label.setGeometry(25, 675, 1050, 100)
+		self.label.setStyleSheet('''\
+border-style: solid;
+border-width: 3;
+border-color: rgb(255, 100, 125);
+border-radius: 20;
+font-size: 20;
+font-weight: 700;''')
+
+		# button up
+		self.button = qpbt(self)
+		self.button.setGeometry(5, 370, 2, 5)
+		self.button.setText("up")
+		self.button.clicked.connect(self.pull_up)
+		self.button.setStyleSheet('''\
+QPushButton::hover
+{
+	color: blue;
+}
+QPushButton
+{
+	background-color: rgba(0, 0, 0, 0);
+	border-style: none;
+	color: black;
+}''')
+
+	# pull up function
+	def pull_up(self):
+		self.original_geo = self.geometry()
+		self.setGeometry(25, 25, 1150, 750)
+		self.button.setText("down")
+		self.button.clicked.connect(self.pull_down)
+
+	def pull_down(self):
+		self.setGeometry(self.original_geo)
+		self.button.setText("up")
+		self.button.clicked.connect(self.pull_up)
