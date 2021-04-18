@@ -13,10 +13,11 @@ from PyQt5.QtGui     import \
 	QKeySequence   as qkes
 
 from PyQt5.QtCore import \
-	QSize as qsiz, \
 	Qt as qt
 
+from objects import *
 from database import database
+
 
 # variables
 
@@ -52,10 +53,12 @@ class interface:
 		self.lineedit_01     = qlin(window)
 		self.lineedit_02     = qlin(window)
 		self.button_01       = body_button(window)
+		self.button_02       = body_button(window)
 		self.database        = database()
 		self.popupbox_01     = popup(window)
 		self.popupbox_02     = popup(window)
 		self.popupbox_03     = popup(window)
+		self.card            = card(window)
 		self.panel_message   = message_panel(window)
 		self.panel_updates   = updates_panel(window)
 		self.shortcut_01     = qsho(self.lineedit_02)
@@ -140,8 +143,10 @@ border-radius: 30;''')
 	def setup_start(self):
 
 		# remove unncessary widgets
+		self.button_02.setVisible(False)
 		self.panel_message.setVisible(False)
 		self.panel_updates.setVisible(False)
+		self.card.setVisible(False)
 
 		# name label
 		label = self.label_01
@@ -259,6 +264,8 @@ padding-left: 5''')
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+		self.card.setVisible(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -273,18 +280,23 @@ padding-left: 5''')
 	def setup_cards(self):
 
 		# hiding unnecessary widgets
-		self.label_01.setText("cards")
+		self.label_01.setVisible(False)
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+
+		# card
+		card = self.card
+		card.setVisible(True)
 		
 		# updates panel
 		panel = self.panel_updates
-		panel.setVisible(True)
+		panel.setVisible(False)
 
 		# messages panel
 		panel = self.panel_message
-		panel.setVisible(True)
+		panel.setVisible(False)
 
 
 	# people window
@@ -293,6 +305,8 @@ padding-left: 5''')
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+		self.card.setVisible(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -309,6 +323,8 @@ padding-left: 5''')
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+		self.card.setVisible(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -325,6 +341,8 @@ padding-left: 5''')
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+		self.card.setVisible(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -341,6 +359,8 @@ padding-left: 5''')
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
+		self.button_02.setVisible(False)
+		self.card.setVisible(False)
 
 
 	# accounts click function
@@ -446,147 +466,13 @@ password: {self.lineedit_02.text()}''')
 		self.popupbox_03.setVisible(False)
 		self.shortcut_06.setEnabled(False)
 
-
-class body_button(qpbt):
-	
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setCursor(hand)
-		self.setStyleSheet('''\
-QPushButton::hover
-{
-	background-color: rgb(255, 255, 255);
-}
-QPushButton
-{
-	background-color: rgb(255, 100, 125);
-	color: black;
-	border-radius: 25;
-	border-style: none;
-	padding-top: 0;
-	padding-left: 0;
-	padding-right: 0;
-}''')
+	# reset password function
+	def reset_password(self):
+		button = self.button_02
+		button.setGeometry(430, 700, 50, 50)		
+		button.setText("reset password")
+		button.adjustSize()
+		button.setVisible(True)
+		
 
 
-class popup(qlab):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.window = window
-		self.setGeometry(300, 200, 600, 400)
-		self.setWordWrap(True)
-		self.setAlignment(top)
-		self.setStyleSheet('''\
-border-style: solid;
-border-width: 5;
-border-radius: 20;
-border-color: rgb(255, 100, 125);
-background-color: rgba(33, 33, 33, 200);
-padding-top: 10;
-padding-left: 10;
-padding-right: 110;''')
-		# yes button
-		self.yes = body_button(self)
-		self.yes.setGeometry(475, 150, 150, 50)
-		self.yes.setText("yes  ")
-		# no button
-		self.no = body_button(self)
-		self.no.setGeometry(475, 250, 150, 50)
-		self.no.setText("no   ")
-		self.setVisible(False)
-
-
-class top_button(qpbt):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setCursor(hand)
-		self.setStyleSheet('''\
-QPushButton::hover
-{
-	font-weight: 700;
-	color: rgb(255, 100, 125);
-}
-QPushButton
-{
-border-style: none;
-background-color: rgba(33, 33, 33, 0);
-}''')
-
-
-class panel(qfra):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setStyleSheet('''\
-background-color: rgba(200, 100, 100, 200);
-border-radius: 20;''')
-
-		# icons
-		self.up   = qico("resources/up.svg")
-		self.down = qico("resources/down.svg")
-
-		# title
-		self.label = qlab(self)
-		self.label.setGeometry(20, 15, 300, 50)
-		self.label.setStyleSheet('''\
-border-radius: 0;
-background-color: rgba(0, 0, 0, 0);
-font: 40pt;
-font-weight: 700;''')
-
-		# button
-		self.button = qpbt(self)
-		self.button.setGeometry(1040, 15, 100, 50)
-		self.button.setIcon(self.up)
-		self.button.setIconSize(qsiz(50, 50))
-		self.button.setCursor(hand)
-		self.button.clicked.connect(self.pull_up)
-		self.button.setStyleSheet('''\
-QPushButton::hover
-{
-	color: white;
-}
-QPushButton
-{
-	background-color: rgba(0, 0, 0, 0);
-	color: black;
-}''')
-
-	# pull up function
-	def pull_up(self):
-		self.setGeometry(25, 80, 1150, 700)
-		self.button.setIcon(self.down)
-		self.button.setIconSize(qsiz(50, 50))
-		self.button.clicked.connect(self.pull_down)
-
-
-class message_panel(panel):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setGeometry(25, 600, 1150, 700)
-		self.label.setText("message")
-
-	# pull down function
-	def pull_down(self):
-		self.setGeometry(25, 600, 1150, 700)
-		self.button.setIcon(self.up)
-		self.button.setIconSize(qsiz(50, 50))
-		self.button.clicked.connect(self.pull_up)
-
-
-class updates_panel(panel):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setGeometry(25, 700, 1150, 750)
-		self.label.setText("updates")
-
-	# pull down function
-	def pull_down(self):
-		self.setGeometry(25, 700, 1150, 750)
-		self.button.setIcon(self.up)
-		self.button.setIconSize(qsiz(50, 50))
-		self.button.clicked.connect(self.pull_up)
