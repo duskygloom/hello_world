@@ -11,11 +11,18 @@ from PyQt5.QtCore import \
     Qt as qt, \
     QSize as qsiz
 
+from icons import *
+
 
 # variables
 
 hand = qt.PointingHandCursor
 top  = qt.AlignTop
+
+
+# icons
+
+
 
 
 class body_button(qpbt):
@@ -73,7 +80,7 @@ class top_button(qpbt):
 	def __init__(self, window: qwin):
 		super().__init__(window)
 		self.setCursor(hand)
-		self.setStyleSheet('''\
+		self.qss_sheet = '''\
 QPushButton::hover
 {
 	font-weight: 700;
@@ -83,7 +90,26 @@ QPushButton
 {
 border-style: none;
 background-color: rgba(33, 33, 33, 0);
+border-radius: 20;
+}'''
+		self.setStyleSheet(self.qss_sheet)
+
+	def is_selected(self, status: bool):
+		if status:
+			self.setStyleSheet('''\
+QPushButton::hover
+{
+	font-weight: 700;
+	color: rgb(255, 100, 125);
+}
+QPushButton
+{
+border-style: none;
+background-color: rgba(127, 33, 128, 100);
+border-radius: 20;
 }''')
+		else:
+			self.setStyleSheet(self.qss_sheet)
 
 
 class panel(qfra):
@@ -93,14 +119,12 @@ class panel(qfra):
 		self.setStyleSheet('''\
 background-color: rgba(200, 100, 100, 200);
 border-radius: 20;''')
-
-		# icons
-		self.up   = qico("resources/up.svg")
+		self.up = qico("resources/up.svg")
 		self.down = qico("resources/down.svg")
 
 		# title
 		self.label = qlab(self)
-		self.label.setGeometry(20, 15, 300, 50)
+		self.label.setGeometry(130, 15, 300, 50)
 		self.label.setStyleSheet('''\
 border-radius: 0;
 background-color: rgba(0, 0, 0, 0);
@@ -109,7 +133,7 @@ font-weight: 700;''')
 
 		# button
 		self.button = qpbt(self)
-		self.button.setGeometry(1040, 15, 100, 50)
+		self.button.setGeometry(15, 15, 100, 50)
 		self.button.setIcon(self.up)
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.setCursor(hand)
@@ -137,12 +161,12 @@ class message_panel(panel):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setGeometry(25, 600, 1150, 700)
+		self.setGeometry(800, 600, 1150, 700)
 		self.label.setText("message")
 
 	# pull down function
 	def pull_down(self):
-		self.setGeometry(25, 600, 1150, 700)
+		self.setGeometry(800, 600, 1150, 700)
 		self.button.setIcon(self.up)
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)
@@ -152,12 +176,12 @@ class updates_panel(panel):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setGeometry(25, 700, 1150, 750)
+		self.setGeometry(800, 700, 1150, 750)
 		self.label.setText("updates")
 
 	# pull down function
 	def pull_down(self):
-		self.setGeometry(25, 700, 1150, 750)
+		self.setGeometry(800, 700, 1150, 750)
 		self.button.setIcon(self.up)
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)
@@ -179,3 +203,32 @@ border-style: solid;
 border-color: rgb(33, 33, 33);
 border-width: 2;
 background-color: rgba(33, 33, 33, 50);''')
+        self.woah = minibutton(self.bottom_panel)
+        self.woah.setGeometry(15, 5, 40, 40)
+        self.shock = minibutton(self.bottom_panel)
+        self.shock.setGeometry(60, 5, 40, 40)
+        self.haha = minibutton(self.bottom_panel)
+        self.haha.setGeometry(105, 5, 40, 40)
+        self.angry = minibutton(self.bottom_panel)
+        self.angry.setGeometry(150, 5, 40, 40)
+        self.sad = minibutton(self.bottom_panel)
+        self.sad.setGeometry(195, 5, 40, 40)
+
+
+class minibutton(qpbt):
+
+	def __init__(self, frame: qfra):
+		super().__init__(frame)
+		self.setFixedSize(40, 40)
+		self.setCursor(hand)
+		self.setStyleSheet('''\
+QPushButton::hover
+{
+	background-color: rgba(33, 33, 33, 100);
+}
+QPushButton
+{
+	border-style: none;
+	background-color: rgba(0, 0, 0, 0);
+}''')
+		self.setIconSize(qsiz(30, 30))

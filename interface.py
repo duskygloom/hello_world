@@ -39,8 +39,13 @@ class interface:
     
 	def __init__(self, window: qwin):
 		self.main_window     = window
-		self.top_box         = qfra(window)
 		self.icon            = qico("resources/icon.svg")
+		self.woah            = qico("resources/woah.png")
+		self.haha            = qico("resources/haha.png")
+		self.shock           = qico("resources/shock.png")
+		self.angry           = qico("resources/angry.png")
+		self.sad             = qico("resources/sad.png")
+		self.top_box         = qfra(window)
 		self.home_button     = qpbt(window)
 		self.cards_button    = top_button(window)
 		self.people_button   = top_button(window)
@@ -257,6 +262,12 @@ padding-left: 5''')
 		popbox = self.popupbox_03
 		popbox.yes.setVisible(False)
 
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(False)
+
 
 	# home window
 	def setup_home(self):
@@ -266,6 +277,12 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -286,17 +303,28 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 
+		self.cards_button.is_selected(True)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(False)
+
 		# card
 		card = self.card
+		card.woah.setIcon(self.woah)
+		card.angry.setIcon(self.angry)
+		card.sad.setIcon(self.sad)
+		card.haha.setIcon(self.haha)
+		card.shock.setIcon(self.shock)
 		card.setVisible(True)
 		
 		# updates panel
 		panel = self.panel_updates
-		panel.setVisible(False)
+		panel.setVisible(True)
 
 		# messages panel
 		panel = self.panel_message
-		panel.setVisible(False)
+		panel.setVisible(True)
 
 
 	# people window
@@ -307,6 +335,12 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(True)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(False)
 
 		# updates panel
 		panel = self.panel_updates
@@ -326,6 +360,12 @@ padding-left: 5''')
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
 
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(True)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(False)
+
 		# updates panel
 		panel = self.panel_updates
 		panel.setVisible(True)
@@ -344,6 +384,12 @@ padding-left: 5''')
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
 
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(True)
+		self.settings_button.is_selected(False)
+
 		# updates panel
 		panel = self.panel_updates
 		panel.setVisible(True)
@@ -361,6 +407,12 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+
+		self.cards_button.is_selected(False)
+		self.people_button.is_selected(False)
+		self.groups_button.is_selected(False)
+		self.posts_button.is_selected(False)
+		self.settings_button.is_selected(True)
 
 
 	# accounts click function
