@@ -16,7 +16,7 @@ from PyQt5.QtCore import \
 	Qt as qt
 
 from objects import *
-from database import database
+from database import *
 
 
 # variables
@@ -27,12 +27,7 @@ left   = qt.AlignLeft
 hand   = qt.PointingHandCursor
 enter  = qkes("Return")
 escape = qkes("Escape")
-data   = "data/users.bat"
-try:
-	with open(data, "rb") as file:
-		users = pickle.load(file)
-except:
-	users = []
+userdata = getuserdata()
 
 
 class interface:
@@ -62,16 +57,17 @@ class interface:
 		self.database        = database()
 		self.popupbox_01     = popup(window)
 		self.popupbox_02     = popup(window)
-		self.popupbox_03     = popup(window)
 		self.card            = card(window)
+		self.prof_header     = profile_header(window)
 		self.panel_message   = message_panel(window)
 		self.panel_updates   = updates_panel(window)
+		self.account_box     = popup(window)
 		self.shortcut_01     = qsho(self.lineedit_02)
 		self.shortcut_02     = qsho(self.popupbox_01)
 		self.shortcut_03     = qsho(self.popupbox_02)
 		self.shortcut_04     = qsho(self.popupbox_01)
 		self.shortcut_05     = qsho(self.popupbox_02)
-		self.shortcut_06     = qsho(self.popupbox_03)
+		self.shortcut_06     = qsho(self.account_box)
 
 
 		# window
@@ -100,7 +96,7 @@ border-color: rgb(255, 100, 125);''')
 		button = self.home_button
 		button.setGeometry(10, 10, 130, 60)
 		button.setText("home")
-		button.clicked.connect(self.setup_start)
+		button.clicked.connect(self.setup_home)
 		button.setCursor(hand)
 		button.setStyleSheet('''\
 background-color: rgb(255, 100, 125);
@@ -218,7 +214,7 @@ padding-left: 5''')
 		popbox.no.clicked.connect(self.login_no)
 
 		# accounts box
-		popbox = self.popupbox_03
+		popbox = self.account_box
 		popbox.setGeometry(570, 100, 600, 400)
 		popbox.no.clicked.connect(self.accounts_close)
 
@@ -259,7 +255,7 @@ padding-left: 5''')
 		shortcut.setEnabled(False)
 
 		# accounts box
-		popbox = self.popupbox_03
+		popbox = self.account_box
 		popbox.yes.setVisible(False)
 
 		self.cards_button.is_selected(False)
@@ -268,21 +264,33 @@ padding-left: 5''')
 		self.posts_button.is_selected(False)
 		self.settings_button.is_selected(False)
 
+		self.prof_header.setVisible(False)
+
 
 	# home window
 	def setup_home(self):
-		self.label_01.setText("home")
+		self.label_01.setVisible(False)
 		self.lineedit_01.setVisible(False)
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+		user = userdata["logged"]
+		if user is not None:
+			self.prof_header.user = user
+		else:
+			self.setup_start()
+		self.prof_header.setVisible(True)
 
 		self.cards_button.is_selected(False)
 		self.people_button.is_selected(False)
 		self.groups_button.is_selected(False)
 		self.posts_button.is_selected(False)
 		self.settings_button.is_selected(False)
+
+		header = profile_header(self.main_window)
+		header.background.setText("background")
+		header.foreground.setText("foreground")
 
 		# updates panel
 		panel = self.panel_updates
@@ -302,6 +310,7 @@ padding-left: 5''')
 		self.lineedit_02.setVisible(False)
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
+		self.prof_header.setVisible(False)
 
 		self.cards_button.is_selected(True)
 		self.people_button.is_selected(False)
@@ -335,6 +344,7 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+		self.prof_header.setVisible(False)
 
 		self.cards_button.is_selected(False)
 		self.people_button.is_selected(True)
@@ -359,6 +369,7 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+		self.prof_header.setVisible(False)
 
 		self.cards_button.is_selected(False)
 		self.people_button.is_selected(False)
@@ -383,6 +394,7 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+		self.prof_header.setVisible(False)
 
 		self.cards_button.is_selected(False)
 		self.people_button.is_selected(False)
@@ -407,6 +419,7 @@ padding-left: 5''')
 		self.button_01.setVisible(False)
 		self.button_02.setVisible(False)
 		self.card.setVisible(False)
+		self.prof_header.setVisible(False)
 
 		self.cards_button.is_selected(False)
 		self.people_button.is_selected(False)
@@ -417,12 +430,16 @@ padding-left: 5''')
 
 	# accounts click function
 	def accounts_click(self):
-		self.popupbox_03.no.setText("close  ")
-		text = "logged in users: \n\n"
-		for i in users:
-			text += " > " + i + "\n"
-		self.popupbox_03.setText(text)
-		self.popupbox_03.setVisible(True)
+		self.account_box.no.setText("close  ")
+		text = "current user: \n\t"
+		logged = userdata["logged"]
+		if logged is not None:
+			text += logged
+		text += "\n\nall users: \n"
+		for i in userdata["others"][:9]:
+			text += "\t" + i + "\n"
+		self.account_box.setText(text)
+		self.account_box.setVisible(True)
 		self.shortcut_06.setEnabled(True)
 
 	# proceed click function
@@ -450,7 +467,7 @@ rules for username and password:
 			self.shortcut_02.setEnabled(True)
 			self.shortcut_04.setEnabled(True)
 		elif value == 2:
-			stat.setText("logging in...")
+			stat.setText("logged in")
 			stat.adjustSize()
 			self.popupbox_02.setText(f'''\
 Confirm login!
@@ -483,18 +500,23 @@ password: {self.lineedit_02.text()}''')
 			self.shortcut_02.setEnabled(False)
 		elif signal == 2:
 			self.label_02.setText("account created")
+			setupuser(name)
 			self.popupbox_01.setVisible(False)
 			self.shortcut_01.setEnabled(True)
 			self.shortcut_02.setEnabled(False)
 
 	# login box yes function
 	def login_yes(self):
-		global users
+		global userdata
 		user = self.lineedit_01.text()
-		if user not in users:
-			users.append(self.lineedit_01.text())
-		with open(data, "wb") as user_bin:
-			pickle.dump(users, user_bin)
+		if user != userdata["logged"]:
+			userdata["logged"] = user
+		_list = userdata["others"]
+		if user != _list:
+			if user in _list:
+				_list.remove(user)
+			_list.insert(0, user)
+		setuserdata(userdata)
 		self.popupbox_02.setVisible(False)
 		self.shortcut_01.setEnabled(True)
 		self.shortcut_03.setEnabled(False)
@@ -515,7 +537,7 @@ password: {self.lineedit_02.text()}''')
 
 	# account box close function
 	def accounts_close(self):
-		self.popupbox_03.setVisible(False)
+		self.account_box.setVisible(False)
 		self.shortcut_06.setEnabled(False)
 
 	# reset password function
@@ -525,6 +547,3 @@ password: {self.lineedit_02.text()}''')
 		button.setText("reset password")
 		button.adjustSize()
 		button.setVisible(True)
-		
-
-

@@ -5,24 +5,18 @@ from PyQt5.QtWidgets import \
     QFrame as qfra
 
 from PyQt5.QtGui import \
-    QIcon as qico
+    QIcon   as qico, \
+	QPixmap as qpix
 
 from PyQt5.QtCore import \
     Qt as qt, \
     QSize as qsiz
-
-from icons import *
 
 
 # variables
 
 hand = qt.PointingHandCursor
 top  = qt.AlignTop
-
-
-# icons
-
-
 
 
 class body_button(qpbt):
@@ -116,15 +110,19 @@ class panel(qfra):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setStyleSheet('''\
+		self.main_qss = '''\
 background-color: rgba(200, 100, 100, 200);
-border-radius: 20;''')
+border-radius: 20;'''
+		self.setStyleSheet(self.main_qss)
 		self.up = qico("resources/up.svg")
 		self.down = qico("resources/down.svg")
 
+		# new title
+		self.message_image = qpix("resources/message.png")
+		self.updates_image = qpix("resources/updates.png")
+
 		# title
 		self.label = qlab(self)
-		self.label.setGeometry(130, 15, 300, 50)
 		self.label.setStyleSheet('''\
 border-radius: 0;
 background-color: rgba(0, 0, 0, 0);
@@ -133,8 +131,9 @@ font-weight: 700;''')
 
 		# button
 		self.button = qpbt(self)
-		self.button.setGeometry(15, 15, 100, 50)
-		self.button.setIcon(self.up)
+		self.button.setGeometry(15, 15, 50, 50)
+		# self.button.setIcon(self.up)
+		self.button.setText("←")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.setCursor(hand)
 		self.button.clicked.connect(self.pull_up)
@@ -147,12 +146,14 @@ QPushButton
 {
 	background-color: rgba(0, 0, 0, 0);
 	color: black;
+	font: 40px;
 }''')
 
 	# pull up function
 	def pull_up(self):
 		self.setGeometry(25, 80, 1150, 700)
-		self.button.setIcon(self.down)
+		# self.button.setIcon(self.down)
+		self.button.setText("→")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_down)
 
@@ -161,13 +162,15 @@ class message_panel(panel):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setGeometry(800, 600, 1150, 700)
-		self.label.setText("message")
+		self.setGeometry(1000, 80, 1150, 700)
+		self.label.setGeometry(25, 75, 36, 214)
+		self.label.setPixmap(self.message_image)
 
 	# pull down function
 	def pull_down(self):
-		self.setGeometry(800, 600, 1150, 700)
-		self.button.setIcon(self.up)
+		self.setGeometry(1000, 80, 1150, 700)
+		# self.button.setIcon(self.up)
+		self.button.setText("←")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)
 
@@ -176,13 +179,15 @@ class updates_panel(panel):
 
 	def __init__(self, window: qwin):
 		super().__init__(window)
-		self.setGeometry(800, 700, 1150, 750)
-		self.label.setText("updates")
+		self.setGeometry(1100, 80, 1150, 700)
+		self.label.setGeometry(15, 80, 53, 199)
+		self.label.setPixmap(self.updates_image)
 
 	# pull down function
 	def pull_down(self):
-		self.setGeometry(800, 700, 1150, 750)
-		self.button.setIcon(self.up)
+		self.setGeometry(1100, 80, 1150, 700)
+		# self.button.setIcon(self.up)
+		self.button.setText("←")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)
 
@@ -232,3 +237,48 @@ QPushButton
 	background-color: rgba(0, 0, 0, 0);
 }''')
 		self.setIconSize(qsiz(30, 30))
+
+
+class profile_header:
+
+	def __init__(self, window: qwin):
+		self.user = None
+		self.background = qlab(window)
+		self.background.setGeometry(-100, 100, 1080, 200)
+		self.background.setStyleSheet('''\
+border-radius: 100;
+background-color: rgb(220, 163, 163);
+padding-left: 100;''')
+		self.foreground = qlab(window)
+		self.foreground.setGeometry(100, 170, 200, 200)
+		self.foreground.setStyleSheet('''\
+border-radius: 50;
+background-color: rgb(240, 223, 175);''')
+		self.about = qpbt(window)
+		self.about.setGeometry(320, 320, 140, 40)
+		self.about.setStyleSheet('''\
+QPushButton::hover
+{
+	font-weight: 700;
+	color: white;
+}
+QPushButton
+{
+	background-color: transparent;
+	border-style: none;
+	color: rgb(147, 224, 227);
+}''')
+		self.about.setText("about me")
+
+	def setVisible(self, status: bool):
+		if status:
+			self.background.setVisible(True)
+			self.background.setText(f"{self.user}'s background")
+			self.foreground.setVisible(True)
+			self.foreground.setText(f"{self.user}'s foreground")
+			self.foreground.setWordWrap(True)
+			self.about.setVisible(True)
+		if not status:
+			self.background.setVisible(False)
+			self.foreground.setVisible(False)
+			self.about.setVisible(False)

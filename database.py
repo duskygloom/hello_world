@@ -1,17 +1,19 @@
+import os, pickle
 import mysql.connector as sql
 
 from dotenv import load_dotenv as load
-from os import getenv
 load()
+
+datadir = os.getenv("datadir")
 
 
 class database:
 
 	def __init__(self):
-		self.host = getenv("host")
-		self.user = getenv("user")
-		self.password = getenv("pass")
-		self.database = getenv("data")
+		self.host = os.getenv("host")
+		self.user = os.getenv("user")
+		self.password = os.getenv("password")
+		self.database = os.getenv("database")
 		self.client = sql.connect(
 			host = self.host,
 			user = self.user,
@@ -60,3 +62,28 @@ class database:
 		com = f'''insert into user_credentials values ("{name}", "{password}")'''
 		cur.execute(com)
 		return 2
+
+# data related functions
+
+def setuserdata(data: dict):
+	with open("data/userdata.bat", "wb") as file:
+		pickle.dump(data, file)
+
+def getuserdata() -> dict:
+	if "userdata.bat" in os.listdir("data"):
+		with open("data/userdata.bat", "rb") as file:
+			userdata = pickle.load(file)
+			return userdata
+	else:
+		datadict = {"logged": None, "others": []}
+		setuserdata(datadict)
+		getuserdata()
+
+def setupuser(name: str):
+	basedir = f"{datadir}/{name}"
+	os.mkdir(basedir)
+	os.mkdir(f"{basedir}/images")
+	os.mkdir(f"{basedir}/audio")
+	os.mkdir(f"{basedir}/video")
+	os.mkdir(f"{basedir}/docs")
+	os.mkdir(f"{basedir}/misc")
