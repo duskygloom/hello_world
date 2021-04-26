@@ -1,5 +1,4 @@
-import pickle
-
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import \
 	QMainWindow    as qwin, \
 	QFrame         as qfra, \
@@ -10,7 +9,8 @@ from PyQt5.QtWidgets import \
 
 from PyQt5.QtGui     import \
 	QIcon          as qico, \
-	QKeySequence   as qkes
+	QKeySequence   as qkes, \
+	QFontDatabase  as qfdb
 
 from PyQt5.QtCore import \
 	Qt as qt
@@ -33,45 +33,46 @@ userdata = getuserdata()
 class interface:
     
 	def __init__(self, window: qwin):
-		self.main_window     = window
-		self.icon            = qico("resources/icon.svg")
-		self.woah            = qico("resources/woah.png")
-		self.haha            = qico("resources/haha.png")
-		self.shock           = qico("resources/shock.png")
-		self.angry           = qico("resources/angry.png")
-		self.sad             = qico("resources/sad.png")
-		self.top_box         = qfra(window)
-		self.home_button     = qpbt(window)
-		self.cards_button    = top_button(window)
-		self.people_button   = top_button(window)
-		self.groups_button   = top_button(window)
-		self.posts_button    = top_button(window)
-		self.settings_button = top_button(window)
-		self.accounts_button = top_button(window)
-		self.label_01        = qlab(window)
-		self.label_02        = qlab(window)
-		self.lineedit_01     = qlin(window)
-		self.lineedit_02     = qlin(window)
-		self.button_01       = body_button(window)
-		self.button_02       = body_button(window)
-		self.database        = database()
-		self.popupbox_01     = popup(window)
-		self.popupbox_02     = popup(window)
-		self.card            = card(window)
-		self.prof_header     = profile_header(window)
-		self.panel_message   = message_panel(window)
-		self.panel_updates   = updates_panel(window)
-		self.account_box     = popup(window)
-		self.shortcut_01     = qsho(self.lineedit_02)
-		self.shortcut_02     = qsho(self.popupbox_01)
-		self.shortcut_03     = qsho(self.popupbox_02)
-		self.shortcut_04     = qsho(self.popupbox_01)
-		self.shortcut_05     = qsho(self.popupbox_02)
-		self.shortcut_06     = qsho(self.account_box)
+		self.mainwindow     = window
+		self.icon           = qico("resources/icon.svg")
+		self.woah           = qico("resources/woah.png")
+		self.haha           = qico("resources/haha.png")
+		self.shock          = qico("resources/shock.png")
+		self.angry          = qico("resources/angry.png")
+		self.sad            = qico("resources/sad.png")
+		self.topbox         = qfra(window)
+		self.homebutton     = qpbt(window)
+		self.cardsbutton    = top_button(window)
+		self.peoplebutton   = top_button(window)
+		self.groupsbutton   = top_button(window)
+		self.postsbutton    = top_button(window)
+		self.settingsbutton = top_button(window)
+		self.accountsbutton = top_button(window)
+		self.label01        = qlab(window)
+		self.label02        = qlab(window)
+		self.linedit01      = qlin(window)
+		self.linedit02      = qlin(window)
+		self.button01       = body_button(window)
+		self.button02       = body_button(window)
+		self.database       = database()
+		self.popupbox01     = popup(window)
+		self.popupbox02     = popup(window)
+		self.card           = card(window)
+		self.resizebox      = resizelement(window)
+		self.profheader     = profile_header(window)
+		self.panelmessage   = message_panel(window)
+		self.panelupdates   = updates_panel(window)
+		self.accountbox     = popup(window)
+		self.shortcut01     = qsho(self.linedit02)
+		self.shortcut02     = qsho(self.popupbox01)
+		self.shortcut03     = qsho(self.popupbox02)
+		self.shortcut04     = qsho(self.popupbox01)
+		self.shortcut05     = qsho(self.popupbox02)
+		self.shortcut06     = qsho(self.accountbox)
 
 
 		# window
-		window = self.main_window
+		window = self.mainwindow
 		window.setGeometry(100, 100, 1200, 800)
 		window.setFixedSize(1200, 800)
 		window.setWindowTitle("hello_world")
@@ -82,7 +83,7 @@ color: white;
 font: 20pt "Josefin Sans"''')
 
 		# top box
-		box = self.top_box
+		box = self.topbox
 		box.setGeometry(17, 10, 1170, 60)
 		box.setStyleSheet('''\
 border-style: none;
@@ -93,7 +94,7 @@ border-width: 3;
 border-color: rgb(255, 100, 125);''')
 
 		# home button
-		button = self.home_button
+		button = self.homebutton
 		button.setGeometry(10, 10, 130, 60)
 		button.setText("home")
 		button.clicked.connect(self.setup_home)
@@ -105,37 +106,37 @@ color: black;
 border-radius: 30;''')
 
 		# cards button
-		button = self.cards_button
+		button = self.cardsbutton
 		button.setGeometry(160, 20, 140, 40)
 		button.setText("cards")
 		button.clicked.connect(self.setup_cards)
 
 		# people button
-		button = self.people_button
+		button = self.peoplebutton
 		button.setGeometry(320, 20, 140, 40)
 		button.setText("people")
 		button.clicked.connect(self.setup_people)
 
 		# groups button
-		button = self.groups_button
+		button = self.groupsbutton
 		button.setGeometry(480, 20, 140, 40)
 		button.setText("groups")
 		button.clicked.connect(self.setup_groups)
 
 		# posts button
-		button = self.posts_button
+		button = self.postsbutton
 		button.setGeometry(640, 20, 140, 40)
 		button.setText("posts")
 		button.clicked.connect(self.setup_posts)
 
 		# settings button
-		button = self.settings_button
+		button = self.settingsbutton
 		button.setGeometry(880, 20, 140, 40)
 		button.setText("settings")
 		button.clicked.connect(self.setup_settings)
 
 		# accounts button
-		button = self.accounts_button
+		button = self.accountsbutton
 		button.setGeometry(1040, 20, 140, 40)
 		button.setText("accounts")
 		button.clicked.connect(self.accounts_click)
@@ -144,13 +145,14 @@ border-radius: 30;''')
 	def setup_start(self):
 
 		# remove unncessary widgets
-		self.button_02.setVisible(False)
-		self.panel_message.setVisible(False)
-		self.panel_updates.setVisible(False)
+		self.button02.setVisible(False)
+		self.panelmessage.setVisible(False)
+		self.panelupdates.setVisible(False)
 		self.card.setVisible(False)
+		self.resizebox.setvisible(False)
 
 		# name label
-		label = self.label_01
+		label = self.label01
 		label.setGeometry(170, 130, 860, 280)
 		label.setText("hello_world")
 		label.setAlignment(center)
@@ -165,7 +167,7 @@ padding-top: 40;''')
 		label.setVisible(True)
 
 		# name field
-		linedit = self.lineedit_01
+		linedit = self.linedit01
 		linedit.setGeometry(430, 520, 340, 40)
 		linedit.setPlaceholderText("username")
 		linedit.setStyleSheet('''\
@@ -176,7 +178,7 @@ border-radius: 15;''')
 		linedit.setVisible(True)
 
 		# password field
-		linedit = self.lineedit_02
+		linedit = self.linedit02
 		linedit.setGeometry(430, 580, 340, 40)
 		linedit.setEchoMode(qlin.Password)
 		linedit.setPlaceholderText("password")
@@ -188,14 +190,14 @@ border-radius: 15;''')
 		linedit.setVisible(True)
 
 		# proceed button
-		button = self.button_01
+		button = self.button01
 		button.setGeometry(540, 670, 130, 50)
 		button.setText("proceed")
 		button.clicked.connect(self.proceed_click)
 		button.setVisible(True)
 
 		# status label
-		label = self.label_02
+		label = self.label02
 		label.setGeometry(0, 770, 130, 50)
 		label.adjustSize()
 		label.setStyleSheet('''\
@@ -204,100 +206,102 @@ padding-left: 5''')
 		label.setVisible(True)
 
 		# enroll box
-		popbox = self.popupbox_01
+		popbox = self.popupbox01
 		popbox.yes.clicked.connect(self.enroll_yes)
 		popbox.no.clicked.connect(self.enroll_no)
 
 		# login box
-		popbox = self.popupbox_02
+		popbox = self.popupbox02
 		popbox.yes.clicked.connect(self.login_yes)
 		popbox.no.clicked.connect(self.login_no)
 
 		# accounts box
-		popbox = self.account_box
+		popbox = self.accountbox
 		popbox.setGeometry(570, 100, 600, 400)
 		popbox.no.clicked.connect(self.accounts_close)
 
 		# proceed shortcut
-		shortcut = self.shortcut_01
+		shortcut = self.shortcut01
 		shortcut.setKey(enter)
 		shortcut.activated.connect(self.proceed_click)
 		shortcut.setEnabled(True)
 
 		# enroll yes shortcut
-		shortcut = self.shortcut_02
+		shortcut = self.shortcut02
 		shortcut.setKey(enter)
 		shortcut.activated.connect(self.enroll_yes)
 		shortcut.setEnabled(False)
 
 		# enroll no shortcut
-		shortcut = self.shortcut_04
+		shortcut = self.shortcut04
 		shortcut.setKey(escape)
 		shortcut.activated.connect(self.enroll_no)
 		shortcut.setEnabled(False)
 
 		# login yes shortcut
-		shortcut = self.shortcut_03
+		shortcut = self.shortcut03
 		shortcut.setKey(enter)
 		shortcut.activated.connect(self.login_yes)
 		shortcut.setEnabled(False)
 
 		# login no shortcut
-		shortcut = self.shortcut_05
+		shortcut = self.shortcut05
 		shortcut.setKey(escape)
 		shortcut.activated.connect(self.login_no)
 		shortcut.setEnabled(False)
 
 		# accounts close shortcut
-		shortcut = self.shortcut_06
+		shortcut = self.shortcut06
 		shortcut.setKey(escape)
 		shortcut.activated.connect(self.accounts_close)
 		shortcut.setEnabled(False)
 
 		# accounts box
-		popbox = self.account_box
+		popbox = self.accountbox
 		popbox.yes.setVisible(False)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(False)
 
-		self.prof_header.setVisible(False)
+		self.profheader.setVisible(False)
 
 
 	# home window
 	def setup_home(self):
-		self.label_01.setVisible(False)
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
+		self.label01.setVisible(False)
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
 		self.card.setVisible(False)
+		self.resizebox.setvisible(False)
+
 		user = userdata["logged"]
 		if user is not None:
-			self.prof_header.user = user
+			self.profheader.user = user
 		else:
 			self.setup_start()
-		self.prof_header.setVisible(True)
+		self.profheader.setVisible(True)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(False)
 
-		header = profile_header(self.main_window)
+		header = profile_header(self.mainwindow)
 		header.background.setText("background")
 		header.foreground.setText("foreground")
 
 		# updates panel
-		panel = self.panel_updates
+		panel = self.panelupdates
 		panel.setVisible(True)
 
 		# messages panel
-		panel = self.panel_message
+		panel = self.panelmessage
 		panel.setVisible(True)
 
 
@@ -305,18 +309,19 @@ padding-left: 5''')
 	def setup_cards(self):
 
 		# hiding unnecessary widgets
-		self.label_01.setVisible(False)
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
-		self.prof_header.setVisible(False)
+		self.label01.setVisible(False)
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
+		self.profheader.setVisible(False)
+		self.resizebox.setvisible(False)
 
-		self.cards_button.is_selected(True)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(True)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(False)
 
 		# card
 		card = self.card
@@ -328,109 +333,116 @@ padding-left: 5''')
 		card.setVisible(True)
 		
 		# updates panel
-		panel = self.panel_updates
+		panel = self.panelupdates
 		panel.setVisible(True)
 
 		# messages panel
-		panel = self.panel_message
+		panel = self.panelmessage
 		panel.setVisible(True)
 
 
 	# people window
 	def setup_people(self):
-		self.label_01.setText("people")
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
+		self.label01.setText("people")
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
 		self.card.setVisible(False)
-		self.prof_header.setVisible(False)
+		self.profheader.setVisible(False)
+		self.resizebox.setvisible(False)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(True)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(True)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(False)
 
 		# updates panel
-		panel = self.panel_updates
+		panel = self.panelupdates
 		panel.setVisible(True)
 
 		# messages panel
-		panel = self.panel_message
+		panel = self.panelmessage
 		panel.setVisible(True)
 
 
 	# groups window
 	def setup_groups(self):
-		self.label_01.setText("groups")
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
+		self.label01.setText("groups")
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
 		self.card.setVisible(False)
-		self.prof_header.setVisible(False)
+		self.profheader.setVisible(False)
+		self.resizebox.setvisible(False)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(True)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(True)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(False)
 
 		# updates panel
-		panel = self.panel_updates
+		panel = self.panelupdates
 		panel.setVisible(True)
 
 		# messages panel
-		panel = self.panel_message
+		panel = self.panelmessage
 		panel.setVisible(True)
 
 
 	# posts window
 	def setup_posts(self):
-		self.label_01.setText("posts")
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
+		self.label01.setText("posts")
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
 		self.card.setVisible(False)
-		self.prof_header.setVisible(False)
+		self.profheader.setVisible(False)
+		self.resizebox.setvisible(False)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(True)
-		self.settings_button.is_selected(False)
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(True)
+		self.settingsbutton.is_selected(False)
 
 		# updates panel
-		panel = self.panel_updates
+		panel = self.panelupdates
 		panel.setVisible(True)
 
 		# messages panel
-		panel = self.panel_message
+		panel = self.panelmessage
 		panel.setVisible(True)
 
 
 	# settings window
 	def setup_settings(self):
-		self.label_01.setText("settings")
-		self.lineedit_01.setVisible(False)
-		self.lineedit_02.setVisible(False)
-		self.button_01.setVisible(False)
-		self.button_02.setVisible(False)
+		self.label01.setVisible(False)
+		self.linedit01.setVisible(False)
+		self.linedit02.setVisible(False)
+		self.button01.setVisible(False)
+		self.button02.setVisible(False)
 		self.card.setVisible(False)
-		self.prof_header.setVisible(False)
+		self.profheader.setVisible(False)
+		self.panelmessage.setVisible(True)
+		self.panelupdates.setVisible(True)
 
-		self.cards_button.is_selected(False)
-		self.people_button.is_selected(False)
-		self.groups_button.is_selected(False)
-		self.posts_button.is_selected(False)
-		self.settings_button.is_selected(True)
+		self.resizebox.setvisible(True)
+
+		self.cardsbutton.is_selected(False)
+		self.peoplebutton.is_selected(False)
+		self.groupsbutton.is_selected(False)
+		self.postsbutton.is_selected(False)
+		self.settingsbutton.is_selected(True)
 
 
 	# accounts click function
 	def accounts_click(self):
-		self.account_box.no.setText("close  ")
+		self.accountbox.no.setText("close  ")
 		text = "current user: \n\t"
 		logged = userdata["logged"]
 		if logged is not None:
@@ -438,77 +450,77 @@ padding-left: 5''')
 		text += "\n\nall users: \n"
 		for i in userdata["others"][:9]:
 			text += "\t" + i + "\n"
-		self.account_box.setText(text)
-		self.account_box.setVisible(True)
-		self.shortcut_06.setEnabled(True)
+		self.accountbox.setText(text)
+		self.accountbox.setVisible(True)
+		self.shortcut06.setEnabled(True)
 
 	# proceed click function
 	def proceed_click(self):
-		stat = self.label_02
-		name = self.lineedit_01.text()
-		password = self.lineedit_02.text()
+		stat = self.label02
+		name = self.linedit01.text()
+		password = self.linedit02.text()
 		value = self.database.authentication(name, password)
 		if value == 0:
 			stat.setText("username is not registered")
 			stat.adjustSize()
-			self.popupbox_01.setText(f'''\
+			self.popupbox01.setText(f'''\
 Confirm enrollment!
 
 
-username: {self.lineedit_01.text()}
-password: {self.lineedit_02.text()}
+username: {self.linedit01.text()}
+password: {self.linedit02.text()}
 
 rules for username and password:
 • username and password must not be empty or whitespace
 • username and password must be longer than 5 characters
 • username and password cannot contain " and \\''')
-			self.popupbox_01.setVisible(True)
-			self.shortcut_01.setEnabled(False)
-			self.shortcut_02.setEnabled(True)
-			self.shortcut_04.setEnabled(True)
+			self.popupbox01.setVisible(True)
+			self.shortcut01.setEnabled(False)
+			self.shortcut02.setEnabled(True)
+			self.shortcut04.setEnabled(True)
 		elif value == 2:
 			stat.setText("logged in")
 			stat.adjustSize()
-			self.popupbox_02.setText(f'''\
+			self.popupbox02.setText(f'''\
 Confirm login!
 
 
-username: {self.lineedit_01.text()}
-password: {self.lineedit_02.text()}''')
-			self.popupbox_02.setVisible(True)
-			self.shortcut_01.setEnabled(False)
-			self.shortcut_03.setEnabled(True)
-			self.shortcut_05.setEnabled(True)
+username: {self.linedit01.text()}
+password: {self.linedit02.text()}''')
+			self.popupbox02.setVisible(True)
+			self.shortcut01.setEnabled(False)
+			self.shortcut03.setEnabled(True)
+			self.shortcut05.setEnabled(True)
 		elif value == 1:
 			stat.setText("incorrect password")
 			stat.adjustSize()
 
 	# enroll box yes function
 	def enroll_yes(self):
-		name = self.lineedit_01.text()
-		password = self.lineedit_02.text()
+		name = self.linedit01.text()
+		password = self.linedit02.text()
 		signal = self.database.enrollment(name, password)
 		if signal == 0:
-			self.label_02.setText("invalid username")
-			self.popupbox_01.setVisible(False)
-			self.shortcut_01.setEnabled(True)
-			self.shortcut_02.setEnabled(False)
+			self.label02.setText("invalid username")
+			self.popupbox01.setVisible(False)
+			self.shortcut01.setEnabled(True)
+			self.shortcut02.setEnabled(False)
 		elif signal == 1:
-			self.label_02.setText("invalid password")
-			self.popupbox_01.setVisible(False)
-			self.shortcut_01.setEnabled(True)
-			self.shortcut_02.setEnabled(False)
+			self.label02.setText("invalid password")
+			self.popupbox01.setVisible(False)
+			self.shortcut01.setEnabled(True)
+			self.shortcut02.setEnabled(False)
 		elif signal == 2:
-			self.label_02.setText("account created")
+			self.label02.setText("account created")
 			setupuser(name)
-			self.popupbox_01.setVisible(False)
-			self.shortcut_01.setEnabled(True)
-			self.shortcut_02.setEnabled(False)
+			self.popupbox01.setVisible(False)
+			self.shortcut01.setEnabled(True)
+			self.shortcut02.setEnabled(False)
 
 	# login box yes function
 	def login_yes(self):
 		global userdata
-		user = self.lineedit_01.text()
+		user = self.linedit01.text()
 		if user != userdata["logged"]:
 			userdata["logged"] = user
 		_list = userdata["others"]
@@ -517,32 +529,32 @@ password: {self.lineedit_02.text()}''')
 				_list.remove(user)
 			_list.insert(0, user)
 		setuserdata(userdata)
-		self.popupbox_02.setVisible(False)
-		self.shortcut_01.setEnabled(True)
-		self.shortcut_03.setEnabled(False)
+		self.popupbox02.setVisible(False)
+		self.shortcut01.setEnabled(True)
+		self.shortcut03.setEnabled(False)
 
 	# enroll box no function
 	def enroll_no(self):
-		self.popupbox_01.setVisible(False)
-		self.shortcut_01.setEnabled(True)
-		self.shortcut_02.setEnabled(False)
-		self.shortcut_04.setEnabled(False)
+		self.popupbox01.setVisible(False)
+		self.shortcut01.setEnabled(True)
+		self.shortcut02.setEnabled(False)
+		self.shortcut04.setEnabled(False)
 
 	# login box no function
 	def login_no(self):
-		self.popupbox_02.setVisible(False)
-		self.shortcut_01.setEnabled(True)
-		self.shortcut_03.setEnabled(False)
-		self.shortcut_05.setEnabled(False)
+		self.popupbox02.setVisible(False)
+		self.shortcut01.setEnabled(True)
+		self.shortcut03.setEnabled(False)
+		self.shortcut05.setEnabled(False)
 
 	# account box close function
 	def accounts_close(self):
-		self.account_box.setVisible(False)
-		self.shortcut_06.setEnabled(False)
+		self.accountbox.setVisible(False)
+		self.shortcut06.setEnabled(False)
 
 	# reset password function
 	def reset_password(self):
-		button = self.button_02
+		button = self.button02
 		button.setGeometry(430, 700, 50, 50)		
 		button.setText("reset password")
 		button.adjustSize()

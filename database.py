@@ -79,11 +79,21 @@ def getuserdata() -> dict:
 		setuserdata(datadict)
 		getuserdata()
 
+def copy(original_file: str, new_file: str):
+	with open(original_file, "rb") as file1:
+		with open(new_file, "wb") as file2:
+			file2.write(file1.read())
+
 def setupuser(name: str):
 	basedir = f"{datadir}/{name}"
-	os.mkdir(basedir)
-	os.mkdir(f"{basedir}/images")
-	os.mkdir(f"{basedir}/audio")
-	os.mkdir(f"{basedir}/video")
-	os.mkdir(f"{basedir}/docs")
-	os.mkdir(f"{basedir}/misc")
+	try:
+		os.mkdir(basedir)
+		os.mkdir(f"{basedir}/images")
+		copy("resoures/background.svg", f"{basedir}/images/background.svg")
+		copy("resoures/foreground.svg", f"{basedir}/images/foreground.svg")
+		os.mkdir(f"{basedir}/audio")
+		os.mkdir(f"{basedir}/video")
+		os.mkdir(f"{basedir}/docs")
+		os.mkdir(f"{basedir}/misc")
+	except FileExistsError:
+		pass

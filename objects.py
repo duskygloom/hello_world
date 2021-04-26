@@ -272,13 +272,70 @@ QPushButton
 
 	def setVisible(self, status: bool):
 		if status:
+			basedir = f"{self.user}/image"
 			self.background.setVisible(True)
-			self.background.setText(f"{self.user}'s background")
+			background = qpix(f"{basedir}/background.svg")
+			self.background.setPixmap(background)
 			self.foreground.setVisible(True)
-			self.foreground.setText(f"{self.user}'s foreground")
-			self.foreground.setWordWrap(True)
+			foreground = qpix(f"{basedir}/foreground.svg")
+			self.foreground.setPixmap(foreground)
 			self.about.setVisible(True)
 		if not status:
 			self.background.setVisible(False)
 			self.foreground.setVisible(False)
 			self.about.setVisible(False)
+
+
+class settingsbutton(qpbt):
+
+	def __init__(self, window: qwin, y: int):
+		super().__init__(window)
+		self.setGeometry(-20, y, 300, 40)
+		self.setCursor(hand)
+		self.setStyleSheet('''\
+QPushButton::hover
+{
+	background-color: rgba(240, 223, 175, 200);
+}
+QPushButton
+{
+	border-radius: 20;
+	background-color: rgba(240, 223, 175, 150);
+	color: black;
+	padding-left: 30;
+	text-align: left;
+	font: 30px;
+}''')
+
+class settingsframe(qfra):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setGeometry(350, 140, 600, 600)
+		self.setStyleSheet('''\
+background-color: transparent;
+border-radius: 20;
+border-style: solid;
+border-width: 5;
+border-color: rgb(240, 223, 175);''')
+
+
+class resizelement:
+
+	def __init__(self, window: qwin):
+
+		# button
+		self.activationbutton = settingsbutton(window, 200)
+		self.activationbutton.setText("resize window")
+		
+		# frame
+		self.frame = settingsframe(window)
+
+	def setvisible(self, status: bool):
+		if status:
+			self.activationbutton.setVisible(True)
+			self.frame.setVisible(True)
+			return
+		self.activationbutton.setVisible(False)
+		self.frame.setVisible(False)
+

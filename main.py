@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import \
     QShortcut    as qsho
 
 from PyQt5.QtGui     import \
-    QKeySequence as qkes
+    QKeySequence  as qkes, \
+    QFontDatabase as qfdb
 
 from interface import interface
 
@@ -12,6 +13,7 @@ from interface import interface
 if __name__ == "__main__":
     import sys
     app = qapp(sys.argv)
+    qfdb.addApplicationFont("resources/josefinfont.ttf")
     window = qwin()
     ui = interface(window)
     ui.setup_start()
