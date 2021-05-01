@@ -1,4 +1,3 @@
-from PyQt5 import QtGui
 from PyQt5.QtWidgets import \
 	QMainWindow    as qwin, \
 	QFrame         as qfra, \
@@ -28,18 +27,19 @@ hand   = qt.PointingHandCursor
 enter  = qkes("Return")
 escape = qkes("Escape")
 userdata = getuserdata()
+settings = getconfdata()
 
 
 class interface:
     
 	def __init__(self, window: qwin):
 		self.mainwindow     = window
-		self.icon           = qico("resources/icon.svg")
-		self.woah           = qico("resources/woah.png")
-		self.haha           = qico("resources/haha.png")
-		self.shock          = qico("resources/shock.png")
-		self.angry          = qico("resources/angry.png")
-		self.sad            = qico("resources/sad.png")
+		self.icon  = qico("resources/icon.svg")
+		self.woah  = qico("resources/woah.png")
+		self.haha  = qico("resources/haha.png")
+		self.shock = qico("resources/shock.png")
+		self.angry = qico("resources/angry.png")
+		self.sad   = qico("resources/sad.png")
 		self.topbox         = qfra(window)
 		self.homebutton     = qpbt(window)
 		self.cardsbutton    = top_button(window)
@@ -58,7 +58,9 @@ class interface:
 		self.popupbox01     = popup(window)
 		self.popupbox02     = popup(window)
 		self.card           = card(window)
-		self.resizebox      = resizelement(window)
+		self.resizelem      = resizelement(window)
+		self.zoomelem       = zoomelement(window)
+		self.themelem       = themelement(window)
 		self.profheader     = profile_header(window)
 		self.panelmessage   = message_panel(window)
 		self.panelupdates   = updates_panel(window)
@@ -140,6 +142,13 @@ border-radius: 30;''')
 		button.setGeometry(1040, 20, 140, 40)
 		button.setText("accounts")
 		button.clicked.connect(self.accounts_click)
+
+		# settings options
+
+		self.resizelem.otheroptions = [self.zoomelem, self.themelem]
+		self.zoomelem.otheroptions = [self.resizelem, self.themelem]
+		self.themelem.otheroptions = [self.resizelem, self.zoomelem]
+
 		
 
 	def setup_start(self):
@@ -149,7 +158,9 @@ border-radius: 30;''')
 		self.panelmessage.setVisible(False)
 		self.panelupdates.setVisible(False)
 		self.card.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		# name label
 		label = self.label01
@@ -277,7 +288,9 @@ padding-left: 5''')
 		self.button01.setVisible(False)
 		self.button02.setVisible(False)
 		self.card.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		user = userdata["logged"]
 		if user is not None:
@@ -315,7 +328,9 @@ padding-left: 5''')
 		self.button01.setVisible(False)
 		self.button02.setVisible(False)
 		self.profheader.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		self.cardsbutton.is_selected(True)
 		self.peoplebutton.is_selected(False)
@@ -350,7 +365,9 @@ padding-left: 5''')
 		self.button02.setVisible(False)
 		self.card.setVisible(False)
 		self.profheader.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(True)
@@ -376,7 +393,9 @@ padding-left: 5''')
 		self.button02.setVisible(False)
 		self.card.setVisible(False)
 		self.profheader.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(False)
@@ -402,7 +421,9 @@ padding-left: 5''')
 		self.button02.setVisible(False)
 		self.card.setVisible(False)
 		self.profheader.setVisible(False)
-		self.resizebox.setvisible(False)
+		self.resizelem.setvisible(False)
+		self.zoomelem.setvisible(False)
+		self.themelem.setvisible(False)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(False)
@@ -431,7 +452,9 @@ padding-left: 5''')
 		self.panelmessage.setVisible(True)
 		self.panelupdates.setVisible(True)
 
-		self.resizebox.setvisible(True)
+		self.resizelem.setvisible(True)
+		self.zoomelem.setvisible(True)
+		self.themelem.setvisible(True)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(False)

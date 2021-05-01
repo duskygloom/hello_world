@@ -286,13 +286,15 @@ QPushButton
 			self.about.setVisible(False)
 
 
-class settingsbutton(qpbt):
+class settingsoption:
 
-	def __init__(self, window: qwin, y: int):
-		super().__init__(window)
-		self.setGeometry(-20, y, 300, 40)
-		self.setCursor(hand)
-		self.setStyleSheet('''\
+	def __init__(self, window: qwin):
+
+		# button
+		self.button = qpbt(window)
+		self.button.setCursor(hand)
+		self.button.clicked.connect(self.buttonclicked)
+		self.button.setStyleSheet('''\
 QPushButton::hover
 {
 	background-color: rgba(240, 223, 175, 200);
@@ -306,36 +308,84 @@ QPushButton
 	text-align: left;
 	font: 30px;
 }''')
+		self.button.setVisible(False)
 
-class settingsframe(qfra):
-
-	def __init__(self, window: qwin):
-		super().__init__(window)
-		self.setGeometry(350, 140, 600, 600)
-		self.setStyleSheet('''\
+		# frame
+		self.frame = qfra(window)
+		self.frame.setGeometry(350, 140, 600, 600)
+		self.frame.setStyleSheet('''\
 background-color: transparent;
 border-radius: 20;
 border-style: solid;
 border-width: 5;
 border-color: rgb(240, 223, 175);''')
+		self.frame.setVisible(False)
 
+		self.label = qlab(self.frame)
+		self.label.setGeometry(50, 50, 50, 50)
+		self.label.setStyleSheet('''\
+border-style: none;
+font: 40px;''')
 
-class resizelement:
+		self.otheroptions = []
 
-	def __init__(self, window: qwin):
-
-		# button
-		self.activationbutton = settingsbutton(window, 200)
-		self.activationbutton.setText("resize window")
-		
-		# frame
-		self.frame = settingsframe(window)
+	def buttonposition(self, y: int):
+		self.button.setGeometry(-20, y, 300, 40)
 
 	def setvisible(self, status: bool):
 		if status:
-			self.activationbutton.setVisible(True)
-			self.frame.setVisible(True)
+			self.button.setVisible(True)
 			return
-		self.activationbutton.setVisible(False)
+		self.button.setVisible(False)
 		self.frame.setVisible(False)
 
+	def buttonclicked(self):
+		if self.frame.isVisible():
+			self.frame.setVisible(False)
+			return
+		for i in self.otheroptions:
+			i.frame.setVisible(False)
+		self.frame.setVisible(True)
+
+	def createhead(self):
+		self.label.setText(self.button.text())
+		self.label.adjustSize()
+
+
+class resizelement(settingsoption):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+
+		# button
+		self.buttonposition(200)
+		self.button.setText("resize window")
+		
+		# frame
+		self.createhead()
+		
+
+class zoomelement(settingsoption):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+
+		# button
+		self.buttonposition(300)
+		self.button.setText("relative size")
+
+		# frame
+		self.createhead()
+
+
+class themelement(settingsoption):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+
+		# button
+		self.buttonposition(400)
+		self.button.setText("change theme")
+
+		# frame
+		self.createhead()

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     import sys
     app = qapp(sys.argv)
     qfdb.addApplicationFont("resources/josefinfont.ttf")
-    window = qwin()
+    window = qwin()    
     ui = interface(window)
     ui.setup_start()
 

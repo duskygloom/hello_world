@@ -61,6 +61,7 @@ class database:
 			return 1
 		com = f'''insert into user_credentials values ("{name}", "{password}")'''
 		cur.execute(com)
+		self.client.commit()
 		return 2
 
 # data related functions
@@ -77,6 +78,20 @@ def getuserdata() -> dict:
 	else:
 		datadict = {"logged": None, "others": []}
 		setuserdata(datadict)
+		getuserdata()
+
+def setconfdata(confdata: dict):
+	with open("data/settings.bat", "wb") as file:
+		pickle.dump(confdata, file)
+
+def getconfdata() -> dict:
+	if "settings.bat" in os.listdir("data"):
+		with open("data/settings.bat", "rb") as file:
+			confdata = pickle.load(file)
+			return confdata
+	else:
+		confdict = {"resolution": "1200x800", "zoom": "1x", "theme": "duskydark"}
+		setconfdata(confdict)
 		getuserdata()
 
 def copy(original_file: str, new_file: str):
