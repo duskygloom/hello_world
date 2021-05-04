@@ -35,11 +35,6 @@ class interface:
 	def __init__(self, window: qwin):
 		self.mainwindow     = window
 		self.icon  = qico("resources/icon.svg")
-		self.woah  = qico("resources/woah.png")
-		self.haha  = qico("resources/haha.png")
-		self.shock = qico("resources/shock.png")
-		self.angry = qico("resources/angry.png")
-		self.sad   = qico("resources/sad.png")
 		self.topbox         = qfra(window)
 		self.homebutton     = qpbt(window)
 		self.cardsbutton    = top_button(window)
@@ -62,6 +57,7 @@ class interface:
 		self.zoomelem       = zoomelement(window)
 		self.themelem       = themelement(window)
 		self.profheader     = profile_header(window)
+		self.cardsgroup     = cardslayout(window)
 		self.panelmessage   = message_panel(window)
 		self.panelupdates   = updates_panel(window)
 		self.accountbox     = popup(window)
@@ -153,7 +149,7 @@ border-radius: 30;''')
 
 	def setup_start(self):
 
-		# remove unncessary widgets
+		# hiding widgets
 		self.button02.setVisible(False)
 		self.panelmessage.setVisible(False)
 		self.panelupdates.setVisible(False)
@@ -161,6 +157,7 @@ border-radius: 30;''')
 		self.resizelem.setvisible(False)
 		self.zoomelem.setvisible(False)
 		self.themelem.setvisible(False)
+		self.cardsgroup.setvisible(False)
 
 		# name label
 		label = self.label01
@@ -282,6 +279,8 @@ padding-left: 5''')
 
 	# home window
 	def setup_home(self):
+
+		# hiding widgets
 		self.label01.setVisible(False)
 		self.linedit01.setVisible(False)
 		self.linedit02.setVisible(False)
@@ -291,6 +290,7 @@ padding-left: 5''')
 		self.resizelem.setvisible(False)
 		self.zoomelem.setvisible(False)
 		self.themelem.setvisible(False)
+		self.cardsgroup.setvisible(False)
 
 		user = userdata["logged"]
 		if user is not None:
@@ -338,14 +338,8 @@ padding-left: 5''')
 		self.postsbutton.is_selected(False)
 		self.settingsbutton.is_selected(False)
 
-		# card
-		card = self.card
-		card.woah.setIcon(self.woah)
-		card.angry.setIcon(self.angry)
-		card.sad.setIcon(self.sad)
-		card.haha.setIcon(self.haha)
-		card.shock.setIcon(self.shock)
-		card.setVisible(True)
+		# showing widgets
+		self.cardsgroup.setvisible(True)
 		
 		# updates panel
 		panel = self.panelupdates
@@ -358,7 +352,8 @@ padding-left: 5''')
 
 	# people window
 	def setup_people(self):
-		self.label01.setText("people")
+
+		# hiding widgets
 		self.linedit01.setVisible(False)
 		self.linedit02.setVisible(False)
 		self.button01.setVisible(False)
@@ -374,6 +369,7 @@ padding-left: 5''')
 		self.groupsbutton.is_selected(False)
 		self.postsbutton.is_selected(False)
 		self.settingsbutton.is_selected(False)
+		self.cardsgroup.setvisible(False)
 
 		# updates panel
 		panel = self.panelupdates
@@ -386,7 +382,8 @@ padding-left: 5''')
 
 	# groups window
 	def setup_groups(self):
-		self.label01.setText("groups")
+
+		# hiding widgets
 		self.linedit01.setVisible(False)
 		self.linedit02.setVisible(False)
 		self.button01.setVisible(False)
@@ -396,6 +393,7 @@ padding-left: 5''')
 		self.resizelem.setvisible(False)
 		self.zoomelem.setvisible(False)
 		self.themelem.setvisible(False)
+		self.cardsgroup.setvisible(False)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(False)
@@ -414,7 +412,8 @@ padding-left: 5''')
 
 	# posts window
 	def setup_posts(self):
-		self.label01.setText("posts")
+
+		# hiding widgets
 		self.linedit01.setVisible(False)
 		self.linedit02.setVisible(False)
 		self.button01.setVisible(False)
@@ -424,6 +423,7 @@ padding-left: 5''')
 		self.resizelem.setvisible(False)
 		self.zoomelem.setvisible(False)
 		self.themelem.setvisible(False)
+		self.cardsgroup.setvisible(False)
 
 		self.cardsbutton.is_selected(False)
 		self.peoplebutton.is_selected(False)
@@ -442,6 +442,8 @@ padding-left: 5''')
 
 	# settings window
 	def setup_settings(self):
+
+		# hiding elements
 		self.label01.setVisible(False)
 		self.linedit01.setVisible(False)
 		self.linedit02.setVisible(False)
@@ -451,6 +453,7 @@ padding-left: 5''')
 		self.profheader.setVisible(False)
 		self.panelmessage.setVisible(True)
 		self.panelupdates.setVisible(True)
+		self.cardsgroup.setvisible(False)
 
 		self.resizelem.setvisible(True)
 		self.zoomelem.setvisible(True)

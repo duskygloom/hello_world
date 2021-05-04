@@ -132,7 +132,6 @@ font-weight: 700;''')
 		# button
 		self.button = qpbt(self)
 		self.button.setGeometry(15, 15, 50, 50)
-		# self.button.setIcon(self.up)
 		self.button.setText("←")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.setCursor(hand)
@@ -144,7 +143,7 @@ QPushButton::hover
 }
 QPushButton
 {
-	background-color: rgba(0, 0, 0, 0);
+	background-color: transparent;
 	color: black;
 	font: 40px;
 }''')
@@ -152,7 +151,6 @@ QPushButton
 	# pull up function
 	def pull_up(self):
 		self.setGeometry(25, 80, 1150, 700)
-		# self.button.setIcon(self.down)
 		self.button.setText("→")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_down)
@@ -169,7 +167,6 @@ class message_panel(panel):
 	# pull down function
 	def pull_down(self):
 		self.setGeometry(1000, 80, 1150, 700)
-		# self.button.setIcon(self.up)
 		self.button.setText("←")
 		self.button.setIconSize(qsiz(50, 50))
 		self.button.clicked.connect(self.pull_up)
@@ -389,3 +386,81 @@ class themelement(settingsoption):
 
 		# frame
 		self.createhead()
+
+
+class cardsbutton(qpbt):
+
+	def __init__(self,window: qwin):
+		super().__init__(window)
+		self.setCursor(hand)
+		self.setStyleSheet('''\
+QPushButton::hover
+{
+	background-color: rgb(100, 100, 100);
+}
+QPushButton
+{
+	border-style: none;
+	background-color: rgb(60, 60, 60);
+	border-radius: 30;
+}''')
+
+
+class cardslayout:
+
+	def __init__(self, window: qwin):
+
+		# frame
+		self.frame = qfra(window)
+		self.frame.setGeometry(30, 90, 940, 680)
+		self.frame.setStyleSheet('''\
+background-color: transparent;
+border-radius: 30;
+border-style: solid;
+border-width: 3;
+border-color: #ff7ff5;''')
+		
+		# prev button
+		self.prevbutton = cardsbutton(window)
+		self.prevbutton.setIcon(qico("resources/cards/prev.svg"))
+		self.prevbutton.setIconSize(qsiz(60, 60))
+		self.prevbutton.setGeometry(20, 400, 60, 60)
+
+		# next button
+		self.nextbutton = cardsbutton(window)
+		self.nextbutton.setIcon(qico("resources/cards/next.svg"))
+		self.nextbutton.setIconSize(qsiz(60, 60))
+		self.nextbutton.setGeometry(920, 400, 60, 60)
+
+		# like button
+		self.likebutton = cardsbutton(window)
+		self.likebutton.setIcon(qico("resources/cards/like.svg"))
+		self.likebutton.setIconSize(qsiz(50, 50))
+		self.likebutton.setGeometry(710, 720, 60, 60)
+
+		# comment button
+		self.commentbutton = cardsbutton(window)
+		self.commentbutton.setIcon(qico("resources/cards/comment.svg"))
+		self.commentbutton.setIconSize(qsiz(50, 50))
+		self.commentbutton.setGeometry(780, 720, 60, 60)
+
+		# share button
+		self.sharebutton = cardsbutton(window)
+		self.sharebutton.setIcon(qico("resources/cards/share.svg"))
+		self.sharebutton.setIconSize(qsiz(50, 50))
+		self.sharebutton.setGeometry(850, 720, 60, 60)
+
+		# report button
+		self.reportbutton = cardsbutton(window)
+		self.reportbutton.setIcon(qico("resources/cards/report.svg"))
+		self.reportbutton.setIconSize(qsiz(50, 50))
+		self.reportbutton.setGeometry(920, 720, 60, 60)
+
+	def setvisible(self, status: bool):
+		self.prevbutton.setVisible(status)
+		self.nextbutton.setVisible(status)
+		self.likebutton.setVisible(status)
+		self.commentbutton.setVisible(status)
+		self.sharebutton.setVisible(status)
+		self.reportbutton.setVisible(status)
+		self.frame.setVisible(status)
