@@ -58,6 +58,16 @@ class interface:
 		self.themelem       = themelement(window)
 		self.profheader     = profile_header(window)
 		self.cardsgroup     = cardslayout(window)
+		self.person01       = persontab(window)
+		self.person02       = persontab(window)
+		self.person03       = persontab(window)
+		self.person04       = persontab(window)
+		self.person05       = persontab(window)
+		self.group01        = persontab(window)
+		self.group02        = persontab(window)
+		self.group03        = persontab(window)
+		self.group04        = persontab(window)
+		self.group05        = persontab(window)
 		self.panelmessage   = message_panel(window)
 		self.panelupdates   = updates_panel(window)
 		self.accountbox     = popup(window)
@@ -149,15 +159,45 @@ border-radius: 30;''')
 
 	def setup_start(self):
 
-		# hiding widgets
-		self.button02.setVisible(False)
-		self.panelmessage.setVisible(False)
-		self.panelupdates.setVisible(False)
-		self.card.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
-		self.cardsgroup.setvisible(False)
+		# show widgets
+		showwidgets(
+			self.label01,
+			self.label02,
+			self.linedit01,
+			self.linedit02,
+			self.button01
+		)
+
+		# hide widgets
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.button02,
+			self.card,
+			self.resizelem,
+			self.themelem,
+			self.zoomelem,
+			self.profheader,
+			self.cardsgroup,
+			self.panelmessage,
+			self.panelupdates,
+			self.accountbox,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
+
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(False)
 
 		# name label
 		label = self.label01
@@ -268,202 +308,293 @@ padding-left: 5''')
 		popbox = self.accountbox
 		popbox.yes.setVisible(False)
 
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(False)
-
-		self.profheader.setVisible(False)
-
 
 	# home window
 	def setup_home(self):
 
+		# show widgets
+		showwidgets(
+			self.profheader,
+			self.panelmessage,
+			self.panelupdates
+		)
+
 		# hiding widgets
-		self.label01.setVisible(False)
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.card.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
-		self.cardsgroup.setvisible(False)
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.label01,
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.card,
+			self.resizelem,
+			self.zoomelem,
+			self.themelem,
+			self.cardsgroup,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
 
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(False)
+
+		# profile header
 		user = userdata["logged"]
-		if user is not None:
-			self.profheader.user = user
-		else:
-			self.setup_start()
-		self.profheader.setVisible(True)
-
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(False)
-
-		header = profile_header(self.mainwindow)
-		header.background.setText("background")
-		header.foreground.setText("foreground")
-
-		# updates panel
-		panel = self.panelupdates
-		panel.setVisible(True)
-
-		# messages panel
-		panel = self.panelmessage
-		panel.setVisible(True)
+		self.profheader.about.setText(user)
 
 
 	# cards window
 	def setup_cards(self):
 
-		# hiding unnecessary widgets
-		self.label01.setVisible(False)
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.profheader.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
+		# show widgets
+		showwidgets(
+			self.cardsgroup,
+			self.panelmessage,
+			self.panelupdates
+		)
 
-		self.cardsbutton.is_selected(True)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(False)
+		# hiding widgets
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.label01,
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.profheader,
+			self.themelem,
+			self.zoomelem,
+			self.resizelem,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
 
-		# showing widgets
-		self.cardsgroup.setvisible(True)
-		
-		# updates panel
-		panel = self.panelupdates
-		panel.setVisible(True)
-
-		# messages panel
-		panel = self.panelmessage
-		panel.setVisible(True)
+		# fixing top buttons
+		self.cardsbutton.isselected(True)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(False)
 
 
 	# people window
 	def setup_people(self):
 
-		# hiding widgets
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.card.setVisible(False)
-		self.profheader.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
+		# showing widgets
+		showwidgets(
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05,
+			self.panelmessage,
+			self.panelupdates
+		)
 
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(True)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(False)
+		# hiding widgets
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.card,
+			self.profheader,
+			self.resizelem,
+			self.zoomelem,
+			self.themelem
+		)
+
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(True)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(False)
 		self.cardsgroup.setvisible(False)
 
-		# updates panel
-		panel = self.panelupdates
-		panel.setVisible(True)
-
-		# messages panel
-		panel = self.panelmessage
-		panel.setVisible(True)
+		# person tabs
+		tab = self.person01
+		tab.place(0)
+		tab.setname("duskygloom")
+		tab.setbackground("resources/me/background.svg")
+		tab.setforeground("resources/me/foreground.svg")
+		tab = self.person02
+		tab.place(1)
+		tab.setname("hello")
+		tab = self.person03
+		tab.place(2)
+		tab.setname("shiro")
+		tab = self.person04
+		tab.place(3)
+		tab.setname("world")
+		tab = self.person05
+		tab.place(4)
+		tab.setname("endorsi")
 
 
 	# groups window
 	def setup_groups(self):
 
+		# show widgets
+		showwidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.panelmessage,
+			self.panelupdates
+		)
+
 		# hiding widgets
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.card.setVisible(False)
-		self.profheader.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
-		self.cardsgroup.setvisible(False)
+		hidewidgets(
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.card,
+			self.profheader,
+			self.resizelem,
+			self.zoomelem,
+			self.themelem,
+			self.cardsgroup,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
+		
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(True)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(False)
 
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(True)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(False)
-
-		# updates panel
-		panel = self.panelupdates
-		panel.setVisible(True)
-
-		# messages panel
-		panel = self.panelmessage
-		panel.setVisible(True)
+		# group tabs
+		tab = self.group01
+		tab.setname("tower of god memes")
+		tab.place(0)
+		tab = self.group02
+		tab.setname("webtoon memes")
+		tab.place(1)
+		tab = self.group03
+		tab.setname("unOrdinary")
+		tab.place(2)
+		tab = self.group04
+		tab.setname("god of high school")
+		tab.place(3)
+		tab = self.group05
+		tab.setname("tower of god")
+		tab.place(4)
 
 
 	# posts window
 	def setup_posts(self):
 
+		# showing widgets
+		showwidgets(
+			self.panelmessage,
+			self.panelupdates
+		)
+
 		# hiding widgets
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.card.setVisible(False)
-		self.profheader.setVisible(False)
-		self.resizelem.setvisible(False)
-		self.zoomelem.setvisible(False)
-		self.themelem.setvisible(False)
-		self.cardsgroup.setvisible(False)
-
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(True)
-		self.settingsbutton.is_selected(False)
-
-		# updates panel
-		panel = self.panelupdates
-		panel.setVisible(True)
-
-		# messages panel
-		panel = self.panelmessage
-		panel.setVisible(True)
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.card,
+			self.profheader,
+			self.resizelem,
+			self.zoomelem,
+			self.themelem,
+			self.cardsgroup,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
+		
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(True)
+		self.settingsbutton.isselected(False)
 
 
 	# settings window
 	def setup_settings(self):
 
+		# showing elements
+		showwidgets(
+			self.panelmessage,
+			self.panelupdates,
+			self.resizelem,
+			self.zoomelem,
+			self.themelem
+		)
+
 		# hiding elements
-		self.label01.setVisible(False)
-		self.linedit01.setVisible(False)
-		self.linedit02.setVisible(False)
-		self.button01.setVisible(False)
-		self.button02.setVisible(False)
-		self.card.setVisible(False)
-		self.profheader.setVisible(False)
-		self.panelmessage.setVisible(True)
-		self.panelupdates.setVisible(True)
-		self.cardsgroup.setvisible(False)
+		hidewidgets(
+			self.group01,
+			self.group02,
+			self.group03,
+			self.group04,
+			self.group05,
+			self.label01,
+			self.linedit01,
+			self.linedit02,
+			self.button01,
+			self.button02,
+			self.card,
+			self.profheader,
+			self.cardsgroup,
+			self.person01,
+			self.person02,
+			self.person03,
+			self.person04,
+			self.person05
+		)
 
-		self.resizelem.setvisible(True)
-		self.zoomelem.setvisible(True)
-		self.themelem.setvisible(True)
-
-		self.cardsbutton.is_selected(False)
-		self.peoplebutton.is_selected(False)
-		self.groupsbutton.is_selected(False)
-		self.postsbutton.is_selected(False)
-		self.settingsbutton.is_selected(True)
+		# fixing top buttons
+		self.cardsbutton.isselected(False)
+		self.peoplebutton.isselected(False)
+		self.groupsbutton.isselected(False)
+		self.postsbutton.isselected(False)
+		self.settingsbutton.isselected(True)
 
 
 	# accounts click function
@@ -577,11 +708,3 @@ password: {self.linedit02.text()}''')
 	def accounts_close(self):
 		self.accountbox.setVisible(False)
 		self.shortcut06.setEnabled(False)
-
-	# reset password function
-	def reset_password(self):
-		button = self.button02
-		button.setGeometry(430, 700, 50, 50)		
-		button.setText("reset password")
-		button.adjustSize()
-		button.setVisible(True)

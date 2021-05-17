@@ -1,3 +1,6 @@
+#! /usr/bin/python3
+
+
 from PyQt5.QtWidgets import \
 	QApplication as qapp, \
 	QMainWindow  as qwin, \
@@ -8,6 +11,7 @@ from PyQt5.QtGui     import \
     QFontDatabase as qfdb
 
 from interface import interface
+from database  import islogged
 
 
 if __name__ == "__main__":
@@ -16,7 +20,11 @@ if __name__ == "__main__":
     qfdb.addApplicationFont("resources/josefinfont.ttf")
     window = qwin()    
     ui = interface(window)
-    ui.setup_start()
+
+    if islogged():
+        ui.setup_home()
+    else:
+        ui.setup_start()
 
     # quit shortcut
     quit_shortcut = qsho(qkes("Ctrl+Q"), window)

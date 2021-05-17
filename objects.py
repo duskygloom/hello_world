@@ -17,6 +17,7 @@ from PyQt5.QtCore import \
 
 hand = qt.PointingHandCursor
 top  = qt.AlignTop
+keepratio = qt.KeepAspectRatio
 
 
 class body_button(qpbt):
@@ -88,7 +89,7 @@ border-radius: 20;
 }'''
 		self.setStyleSheet(self.qss_sheet)
 
-	def is_selected(self, status: bool):
+	def isselected(self, status: bool):
 		if status:
 			self.setStyleSheet('''\
 QPushButton::hover
@@ -114,8 +115,6 @@ class panel(qfra):
 background-color: rgba(200, 100, 100, 200);
 border-radius: 20;'''
 		self.setStyleSheet(self.main_qss)
-		self.up = qico("resources/up.svg")
-		self.down = qico("resources/down.svg")
 
 		# new title
 		self.message_image = qpix("resources/message.png")
@@ -239,24 +238,32 @@ QPushButton
 class profile_header:
 
 	def __init__(self, window: qwin):
-		self.user = None
+
+		# background
+		self.bgimage = qpix("resources/me/background.svg")
 		self.background = qlab(window)
 		self.background.setGeometry(-100, 100, 1080, 200)
+		self.background.setPixmap(self.bgimage)
 		self.background.setStyleSheet('''\
 border-radius: 100;
-background-color: rgb(220, 163, 163);
+background-color: transparent;
 padding-left: 100;''')
+
+		# foreground
+		self.fgimage = qpix("resources/me/foreground.svg")
 		self.foreground = qlab(window)
 		self.foreground.setGeometry(100, 170, 200, 200)
+		self.foreground.setPixmap(self.fgimage)
 		self.foreground.setStyleSheet('''\
 border-radius: 50;
-background-color: rgb(240, 223, 175);''')
+background-color: transparent;''')
+
+		# about
 		self.about = qpbt(window)
 		self.about.setGeometry(320, 320, 140, 40)
 		self.about.setStyleSheet('''\
 QPushButton::hover
 {
-	font-weight: 700;
 	color: white;
 }
 QPushButton
@@ -265,22 +272,12 @@ QPushButton
 	border-style: none;
 	color: rgb(147, 224, 227);
 }''')
-		self.about.setText("about me")
+		self.about.setText("none")
 
-	def setVisible(self, status: bool):
-		if status:
-			basedir = f"{self.user}/image"
-			self.background.setVisible(True)
-			background = qpix(f"{basedir}/background.svg")
-			self.background.setPixmap(background)
-			self.foreground.setVisible(True)
-			foreground = qpix(f"{basedir}/foreground.svg")
-			self.foreground.setPixmap(foreground)
-			self.about.setVisible(True)
-		if not status:
-			self.background.setVisible(False)
-			self.foreground.setVisible(False)
-			self.about.setVisible(False)
+	def setvisible(self, status: bool):
+		self.background.setVisible(status)
+		self.foreground.setVisible(status)
+		self.about.setVisible(status)
 
 
 class settingsoption:
@@ -396,12 +393,12 @@ class cardsbutton(qpbt):
 		self.setStyleSheet('''\
 QPushButton::hover
 {
-	background-color: rgb(100, 100, 100);
+	background-color: #595a5e;
 }
 QPushButton
 {
 	border-style: none;
-	background-color: rgb(60, 60, 60);
+	background-color: #303135;
 	border-radius: 30;
 }''')
 
@@ -418,7 +415,7 @@ background-color: transparent;
 border-radius: 30;
 border-style: solid;
 border-width: 3;
-border-color: #ff7ff5;''')
+border-color: white;''')
 		
 		# prev button
 		self.prevbutton = cardsbutton(window)
@@ -464,3 +461,78 @@ border-color: #ff7ff5;''')
 		self.sharebutton.setVisible(status)
 		self.reportbutton.setVisible(status)
 		self.frame.setVisible(status)
+
+
+def hidewidgets(*widgets):
+	for i in widgets:
+		try:
+			i.setVisible(False)
+		except:
+			i.setvisible(False)
+
+def showwidgets(*widgets):
+	for i in widgets:
+		try:
+			i.setVisible(True)
+		except:
+			i.setvisible(True)
+
+
+class persontab(qfra):
+
+	def __init__(self, window: qwin):
+		super().__init__(window)
+		self.setStyleSheet('''\
+background-color: transparent;''')
+
+		# background
+		self.background = qlab(self)
+		self.background.setGeometry(-60, 0, 950, 120)
+		self.background.setStyleSheet('''\
+border-radius: 60;
+padding-left: 60;
+background-color: transparent;''')
+
+		# foreground
+		self.foreground = qlab(self)
+		self.foreground.setGeometry(20, 10, 100, 100)
+		self.foreground.setStyleSheet('''\
+background-color: transparent;
+border-radius: 20;''')
+
+		# name
+		self.name = qlab(self)
+		self.name.setGeometry(140, 50, 120, 60)
+		self.name.setStyleSheet('''\
+color: black;
+background-color: rgba(200, 100, 125, 200);
+border-radius: 10;''')
+
+	def place(self, position: int):
+		'''places person tab in the given index'''
+		if position == 0:
+			self.setGeometry(0, 90, 950, 120)
+		elif position == 1:
+			self.setGeometry(0, 230, 950, 120)
+		elif position == 2:
+			self.setGeometry(0, 370, 950, 120)
+		elif position == 3:
+			self.setGeometry(0, 510, 950, 120)
+		elif position == 4:
+			self.setGeometry(0, 650, 950, 120)
+
+	def setname(self, name: str):
+		'''sets the name of the person'''
+		self.name.setText("  " + name + "  ")
+		self.name.adjustSize()
+
+	def setbackground(self, path: str):
+		'''sets background using the path'''
+		image = qpix(path)
+		self.background.setPixmap(image)
+
+	def setforeground(self, path: str):
+		'''sets foreground using the path'''
+		image = qpix(path)
+		image.scaled(100, 100, keepratio)
+		self.foreground.setPixmap(image)

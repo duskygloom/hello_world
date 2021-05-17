@@ -80,6 +80,11 @@ def getuserdata() -> dict:
 		setuserdata(datadict)
 		getuserdata()
 
+def islogged() -> bool:
+	if getuserdata()["logged"] is None:
+		return False
+	return True
+
 def setconfdata(confdata: dict):
 	with open("data/settings.bat", "wb") as file:
 		pickle.dump(confdata, file)
